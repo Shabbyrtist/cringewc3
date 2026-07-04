@@ -1,2 +1,2 @@
 local h101 = UnitDefinition:new('H101', 'Hpal')
-h101:setName('Hello objediting')
+h101:setName('Паладинчик')
