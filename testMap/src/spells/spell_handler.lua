@@ -2,8 +2,6 @@ SpellHandler = {}
 
 local spellMap = {}
 
-print('wow!')
-
 function SpellHandler.Register(rawcode, callback)
     spellMap[rawcode] = callback
 end
