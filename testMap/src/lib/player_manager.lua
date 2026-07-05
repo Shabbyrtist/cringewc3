@@ -3,7 +3,7 @@ local players = {}
 
 function PlayerManager.onLeave(p)
     players[id].isInGame = false
-    print('Player ' .. p .. 'has leaved')
+    print('Player ' .. p .. ' has leaved')
 end
 
 function PlayerManager.isActive(p)
@@ -24,35 +24,31 @@ function PlayerManager.init()
 
     TriggerRegisterTimerEvent(trig, 0.01, false)
     TriggerAddAction(trig, function()
+
         for i = 0, GetBJMaxPlayers() - 1 do
 
             local p = Player(i)
-    
-            if GetPlayerController(p) ~= MAP_CONTROL_USER or GetPlayerSlotState(p) ~= PLAYER_SLOT_STATE_PLAYING then
-                return
+            
+            --Если слот игрока для человека и он в игре
+            if GetPlayerController(p) == MAP_CONTROL_USER and GetPlayerSlotState(p) == PLAYER_SLOT_STATE_PLAYING then
+                
+                --создаем триггер на его лив
+                trig = CreateTrigger()
+
+                TriggerRegisterPlayerEvent(trig, p, EVENT_PLAYER_LEAVE)
+                TriggerAddAction(trig, function()
+                    PlayerManager.onLeave(GetTriggerPlayer())
+                end)
+
+                players[i] = {
+                    explosionChance = 0,
+                    vp = 0,
+                    isInGame = true
+                }
+                
             end
-
-            players[i] = {
-                explosionChance = 0,
-                vp = 0,
-                isInGame = true
-            }
-
-            print(players[i].isInGame)
-
         end
     end)
-
-    trig = CreateTrigger()
-    for i = 0, GetBJMaxPlayers() - 1 do
-        TriggerRegisterPlayerEvent(trig, p, EVENT_PLAYER_LEAVE)
-    end
-
-    TriggerAddAction(trig, function()
-        local p = GetTriggerPlayer()
-        PlayerManager.onLeave(p)
-    end)
-
 end
 
 PlayerManager.init()
