@@ -1,31 +1,21 @@
 PlayerManager = {}
-PlayerManager.players = {}
+local players = {}
 
 function PlayerManager.onLeave(p)
-    local id = GetPlayerId(p)
-    
-    if M[id] then
-        PlayerManager.players[id].IsInGame = false
-        print('Player ' .. p .. 'has leaved')
-    end
+    players[id].isInGame = false
+    print('Player ' .. p .. 'has leaved')
 end
 
 function PlayerManager.isActive(p)
-    local data = PlayerManager.players[GetPlayerId(p)]
-    return data and data.active
+    return players[p].isInGame
 end
 
-function PlayerManager.hasChosen(p)
-    local data = PlayerManager.players[GetPlayerId(p)]
-    return data and data.choiceMade
+function PlayerManager.increasExplosionChance(p, chance)
+    players[p].explosionChance = players[p].explosionChance + chance
 end
 
-function PlayerManager.setChosen(p, choice)
-    PlayerManager.players[GetPlayerId(p)].choice = choice
-end
-
-function PlayerManager.increasChance(p, val)
-    PlayerManager.players[GetPlayerId(p)].points = PlayerManager.players[GetPlayerId(p)].points + val
+function PlayerManager.addVP(p, vp)
+    players[p].vp = players[p].vp + vp
 end
 
 function PlayerManager.init()
@@ -42,13 +32,13 @@ function PlayerManager.init()
                 return
             end
 
-            PlayerManager.players[i] = {
-                chanceExpl = 0,
+            players[i] = {
+                explosionChance = 0,
                 vp = 0,
-                IsInGame = true
+                isInGame = true
             }
 
-            print(PlayerManager.players[i].IsInGame)
+            print(players[i].isInGame)
 
         end
     end)
