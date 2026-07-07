@@ -2,7 +2,8 @@ local Shoping = {}
 
 function Shoping.StartPhase()
     print("Шопинг - Начало")
-    PhaseHandler.NextState()
+    local phaseHandler = require("lib.PhaseHandler")
+    phaseHandler.NextState()
 end
 
 function Shoping.EndPhase()

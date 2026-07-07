@@ -1,3 +1,11 @@
+gg_rct_trackStartPlayer1 = nil
+gg_rct_trackStartPlayer2 = nil
+gg_rct_trackStartPlayer3 = nil
+gg_rct_trackStartPlayer4 = nil
+gg_rct_trackStartPlayer5 = nil
+gg_rct_trackStartPlayer6 = nil
+gg_rct_trackStartPlayer7 = nil
+gg_rct_trackStartPlayer8 = nil
 function InitGlobals()
 end
 
@@ -28,6 +36,19 @@ end
 function CreateAllUnits()
 CreatePlayerBuildings()
 CreatePlayerUnits()
+end
+
+function CreateRegions()
+local we
+
+gg_rct_trackStartPlayer1 = Rect(-2752.0, -2752.0, -2624.0, -2624.0)
+gg_rct_trackStartPlayer2 = Rect(-1984.0, -2752.0, -1856.0, -2624.0)
+gg_rct_trackStartPlayer3 = Rect(-1216.0, -2752.0, -1088.0, -2624.0)
+gg_rct_trackStartPlayer4 = Rect(-448.0, -2752.0, -320.0, -2624.0)
+gg_rct_trackStartPlayer5 = Rect(320.0, -2752.0, 448.0, -2624.0)
+gg_rct_trackStartPlayer6 = Rect(1088.0, -2752.0, 1216.0, -2624.0)
+gg_rct_trackStartPlayer7 = Rect(1856.0, -2752.0, 1984.0, -2624.0)
+gg_rct_trackStartPlayer8 = Rect(2624.0, -2752.0, 2752.0, -2624.0)
 end
 
 function InitCustomPlayerSlots()
@@ -186,6 +207,7 @@ NewSoundEnvironment("Default")
 SetAmbientDaySound("SunkenRuinsDay")
 SetAmbientNightSound("SunkenRuinsNight")
 SetMapMusic("Music", true, 0)
+CreateRegions()
 CreateAllUnits()
 InitBlizzard()
 InitGlobals()

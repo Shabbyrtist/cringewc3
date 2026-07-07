@@ -1,29 +1,33 @@
-PlayerManager = {}
+local PlayerHandler = {}
 local players = {}
 
-function PlayerManager.onLeave(p)
-    players[id].isInGame = false
+function PlayerHandler.GetPlayers()
+    return players
+end
+
+function PlayerHandler.OnLeave(p)
+    players[p].isInGame = false
     print('Player ' .. p .. ' has leaved')
 end
 
-function PlayerManager.isActive(p)
+function PlayerHandler.IsActive(p)
     return players[p].isInGame
 end
 
-function PlayerManager.increasExplosionChance(p, chance)
+function PlayerHandler.IncreasExplosionChance(p, chance)
     players[p].explosionChance = players[p].explosionChance + chance
 end
 
-function PlayerManager.addVP(p, vp)
+function PlayerHandler.AddVP(p, vp)
     players[p].vp = players[p].vp + vp
 end
 
-function PlayerManager.init()
+function PlayerHandler.Init()
 
-    local trig = CreateTrigger()
+    --local trig = CreateTrigger()
 
-    TriggerRegisterTimerEvent(trig, 0.01, false)
-    TriggerAddAction(trig, function()
+    --TriggerRegisterTimerEvent(trig, 0.01, false)
+    --TriggerAddAction(trig, function()
 
         for i = 0, GetBJMaxPlayers() - 1 do
 
@@ -33,22 +37,24 @@ function PlayerManager.init()
             if GetPlayerController(p) == MAP_CONTROL_USER and GetPlayerSlotState(p) == PLAYER_SLOT_STATE_PLAYING then
                 
                 --создаем триггер на его лив
-                trig = CreateTrigger()
+                local trig = CreateTrigger()
 
                 TriggerRegisterPlayerEvent(trig, p, EVENT_PLAYER_LEAVE)
                 TriggerAddAction(trig, function()
-                    PlayerManager.onLeave(GetTriggerPlayer())
+                    PlayerHandler.onLeave(GetTriggerPlayer())
                 end)
 
-                players[i] = {
+                players[p] = {
                     explosionChance = 0,
                     vp = 0,
-                    isInGame = true
+                    isInGame = true,
+                    dragonUnit = nil,
+                    trackStartRegion = nil
                 }
                 
             end
         end
-    end)
+    --end)
 end
 
-PlayerManager.init()
+return PlayerHandler

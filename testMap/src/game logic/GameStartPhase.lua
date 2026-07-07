@@ -2,7 +2,33 @@ local GameStart = {}
 
 function GameStart.StartPhase()
     print("Старт игры - Начало")
-    PhaseHandler.NextState()
+    
+    local phaseHandler = require("lib.PhaseHandler")
+    local playerHandler = require("lib.PlayerHandler")
+    local playerDragonHandler = require("lib.PlayerDragonHandler")
+    local trackHandler = require("lib.TrackHandler")
+
+    local players = playerHandler.GetPlayers()
+
+    for p, data in pairs(players) do
+        local trackStartRegion = _G["gg_rct_trackStartPlayer" .. (GetPlayerId(p) + 1)]
+        data.trackStartRegion = trackStartRegion
+        local x = GetRectCenterX(trackStartRegion)
+        local y = GetRectCenterY(trackStartRegion)
+
+        local dragon = playerDragonHandler.CreateDragonForPlayer(p)
+        data.dragonUnit = dragon
+        SetUnitPosition(dragon, x, y)
+
+        trackHandler.CreateTrackForPlayer(p)
+
+        if (GetLocalPlayer()) then
+            SelectUnit(dragon, true)
+            SetCameraPosition(x, y)
+        end
+    end
+
+    phaseHandler.NextState()
 end
 
 function GameStart.EndPhase()

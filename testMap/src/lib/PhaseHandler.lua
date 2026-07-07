@@ -1,4 +1,4 @@
-PhaseHandler = {}
+local PhaseHandler = {}
 
 -- Подключаем состояния
 local GameStart = require("game logic.GameStartPhase")
@@ -60,4 +60,4 @@ function PhaseHandler.Init()
 
 end
 
-PhaseHandler.Init()
+return PhaseHandler

@@ -1,5 +1,4 @@
-SpellHandler = {}
-
+local SpellHandler = {}
 local spellMap = {}
 
 function SpellHandler.Register(rawcode, callback)
@@ -18,4 +17,4 @@ function SpellHandler.Init()
     end)
 end
 
-SpellHandler.Init()
+return SpellHandler
