@@ -38,7 +38,6 @@ function PlayerDragonHandler.CreateDragonForPlayer(p)
     UnitRemoveAbility(dragon, FourCC('Aatk'))
     UnitRemoveAbility(dragon, FourCC('Amov'))
     UnitAddAbility(dragon, FourCC('Avul'))
-    UnitAddAbility(dragon, FourCC('AHhb'))
     SetUnitFlyHeight(dragon, 90, 0.)
     SetUnitScale(dragon, scale, scale, scale)
     

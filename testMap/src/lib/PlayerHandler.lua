@@ -22,6 +22,14 @@ function PlayerHandler.AddVP(p, vp)
     players[p].vp = players[p].vp + vp
 end
 
+function PlayerHandler.AddFoodIntoTheBag(p, newFoodUnitName)
+    players[p].foodBag[#players[p].foodBag + 1] = newFoodUnitName
+end
+
+function PlayerHandler.GetFoodBag(p)
+    return players[p].foodBag
+end
+
 function PlayerHandler.Init()
 
     --local trig = CreateTrigger()
@@ -45,11 +53,12 @@ function PlayerHandler.Init()
                 end)
 
                 players[p] = {
+                    isInGame = true,
                     explosionChance = 0,
                     vp = 0,
-                    isInGame = true,
                     dragonUnit = nil,
-                    trackStartRegion = nil
+                    trackStartRegion = nil,
+                    foodBag = {}
                 }
                 
             end

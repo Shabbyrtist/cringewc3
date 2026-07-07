@@ -3,14 +3,13 @@ local GameStart = {}
 function GameStart.StartPhase()
     print("Старт игры - Начало")
     
-    local phaseHandler = require("lib.PhaseHandler")
-    local playerHandler = require("lib.PlayerHandler")
-    local playerDragonHandler = require("lib.PlayerDragonHandler")
-    local trackHandler = require("lib.TrackHandler")
+    local phaseHandler          = require("lib.PhaseHandler")
+    local playerHandler         = require("lib.PlayerHandler")
+    local playerDragonHandler   = require("lib.PlayerDragonHandler")
+    local trackHandler          = require("lib.TrackHandler")
+    local foodDB                = require("lib.FoodDB")
 
-    local players = playerHandler.GetPlayers()
-
-    for p, data in pairs(players) do
+    for p, data in pairs(playerHandler.GetPlayers()) do
         local trackStartRegion = _G["gg_rct_trackStartPlayer" .. (GetPlayerId(p) + 1)]
         data.trackStartRegion = trackStartRegion
         local x = GetRectCenterX(trackStartRegion)
@@ -21,6 +20,11 @@ function GameStart.StartPhase()
         SetUnitPosition(dragon, x, y)
 
         trackHandler.CreateTrackForPlayer(p)
+
+        playerHandler.AddFoodIntoTheBag(p, "Timmy")
+        playerHandler.AddFoodIntoTheBag(p, "Timmy")
+        playerHandler.AddFoodIntoTheBag(p, "Timmy")
+        playerHandler.AddFoodIntoTheBag(p, "Timmy")
 
         if (GetLocalPlayer()) then
             SelectUnit(dragon, true)

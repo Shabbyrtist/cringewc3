@@ -11,7 +11,9 @@ SETTINGS_TRACK_SEGMENTS_LENGTH = 256;
 local playerHandler = require("lib.PlayerHandler")
 local spellHandler = require("lib.SpellHandler")
 local phaseHandler = require("lib.PhaseHandler")
+local foodDB = require("lib.FoodDB")
 
+foodDB.Init()
 playerHandler.Init()
 spellHandler.Init()
 phaseHandler.Init()
