@@ -1,8 +1,31 @@
 local PlayerDragonHandler = {}
+local playerHandler = require("lib.PlayerHandler")
 
-function PlayerDragonHandler.MoveDragonForPlayer(p, steps)
-    local playerHandler = require("lib.PlayerHandler")
-    local dragon = playerHandler.GetPlayers()[p].dragonUnit
+local function EndOfMovement(p)
+    local dragon = playerHandler.GetDragonUnit(p)
+    local chance, isExploded = PlayerDragonHandler.IsPlayerDragonExploded(p)
+    local activePhase = require("game logic.ActivePhase")
+
+    --@debug@
+    print("Выпашее значение: " .. chance .. "; Шанс взрыва: " .. playerHandler.GetExplosionChance(p))
+    --@debug-end@
+
+    if isExploded then
+        DestroyEffect(AddSpecialEffect(MDL_MEAT_EXPLOSION, GetUnitX(dragon), GetUnitY(dragon)))
+        activePhase.PlayerAction(p, "stop")
+    end
+end
+
+function PlayerDragonHandler.IsPlayerDragonExploded(p)
+    local chance = GetRandomInt(1, 100)
+    local playerExplosionChance = playerHandler.GetExplosionChance(p)
+    local playerExplosionChanceTrashhold = playerHandler.GetExplosionChanceTrashhold(p)
+
+    return chance, (chance < playerExplosionChance) and (playerExplosionChance > playerExplosionChanceTrashhold)
+end
+
+function PlayerDragonHandler.MovePlayerDragon(p, steps)
+    local dragon = playerHandler.GetDragonUnit(p)
     local speed = 25
     local x = GetUnitX(dragon)
 
@@ -22,6 +45,7 @@ function PlayerDragonHandler.MoveDragonForPlayer(p, steps)
         if tik >= tiks then
             SetUnitPosition(dragon, x, targetY)
             playerHandler.SetCurrentTrackSegment(p, playerHandler.GetCurrentTrackSegment(p) + steps)
+            EndOfMovement(p)
             DestroyTimer(timer)
             return
         end
@@ -29,6 +53,20 @@ function PlayerDragonHandler.MoveDragonForPlayer(p, steps)
         local yy = GetUnitY(dragon) + tiksY
         SetUnitPosition(dragon, x, yy)
     end)
+end
+
+function PlayerDragonHandler.ResetPosition(p)
+    local dragon = playerHandler.GetDragonUnit(p)
+    local trackHandler = require("lib.TrackHandler")
+    local x = trackHandler.GetPlayerTrackX(p)
+    local y = trackHandler.GetPlayerTrackSegmentY(p, 0)
+
+    SetUnitPosition(dragon, x, y)
+        
+    if (GetLocalPlayer() == p) then
+        SelectUnit(dragon, true)
+        SetCameraPosition(x, y)
+    end
 end
 
 function PlayerDragonHandler.CreateDragonForPlayer(p)

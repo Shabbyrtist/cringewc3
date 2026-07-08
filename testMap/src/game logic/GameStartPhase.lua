@@ -21,7 +21,7 @@ function GameStart.StartPhase()
         local y = GetRectCenterY(trackStartRegion)
 
         local dragon = playerDragonHandler.CreateDragonForPlayer(p)
-        data.dragonUnit = dragon
+        playerHandler.SetDragonUnit(p, dragon)
         SetUnitPosition(dragon, x, y)
 
         trackHandler.CreateTrackForPlayer(p)
@@ -30,10 +30,12 @@ function GameStart.StartPhase()
         bag.AddFood(p, "Timmy")
         bag.AddFood(p, "Timmy")
         bag.AddFood(p, "Timmy")
+        bag.AddFood(p, "VillagerM")
+        bag.AddFood(p, "VillagerM")
 
         --@debug@
-        print("Игрок " .. GetPlayerName(p) .. ": добавлено 4 Timmy, всего в мешке = " .. bag.Count(p)) 
-        --@end-debug@   
+        print("Игрок " .. GetPlayerName(p) .. ": добавлено 4 Timmy, всего в мешке = " .. bag.BufferCount(p)) 
+        --@end-debug@
 
         if (GetLocalPlayer() == p) then
             SelectUnit(dragon, true)

@@ -38,6 +38,26 @@ function PlayerHandler.GetCurrentTrackSegment(p)
     return players[p].currentTrackSegment
 end
 
+function PlayerHandler.SetExplosionChance(p, v)
+    players[p].explosionChance = v
+end
+
+function PlayerHandler.GetExplosionChance(p)
+    return players[p].explosionChance
+end
+
+function PlayerHandler.SetDragonUnit(p, dragon)
+    players[p].dragonUnit = dragon
+end
+
+function PlayerHandler.GetDragonUnit(p)
+    return players[p].dragonUnit
+end
+
+function PlayerHandler.GetExplosionChanceTrashhold(p)
+    return players[p].explosionChanceTrashhold
+end
+
 function PlayerHandler.Init()
     for i = 0, GetBJMaxPlayers() - 1 do
 
@@ -56,12 +76,18 @@ function PlayerHandler.Init()
 
             players[p] = {
                 isInGame = true,
+
                 dragonUnit = nil,
                 trackStartRegion = nil,
+
                 foodBag = {},
+                bufferFoodBag = {},
+
                 isDoneWithAction = false,
                 currentTrackSegment = 1,
+
                 explosionChance = 0,
+                explosionChanceTrashhold = 15,
                 vp = 0
             }
             

@@ -9,6 +9,9 @@ SETTINGS_TRACK_SEGMENTS_NUMBER = 50;
 SETTINGS_TRACK_SEGMENTS_LENGTH = 256;
 
 SFX_FOOD_TIMMY_DEATH = "units\\critters\\villagerkid\\villagerchilddeath1.wav"
+SFX_FOOD_VILLAGERM_DEATH = "units\\critters\\villagerman\\villagermaledeath1.wav"
+
+MDL_MEAT_EXPLOSION = "Objects\\Spawnmodels\\Human\\HumanLargeDeathExplode\\HumanLargeDeathExplode.mdl"
 
 local playerHandler = require("lib.PlayerHandler")
 local spellHandler = require("lib.SpellHandler")

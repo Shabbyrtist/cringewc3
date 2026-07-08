@@ -43,12 +43,21 @@ function FoodDB.NewFoodUnit(foodName, data)
 end
 
 function FoodDB.Init()
-    local data = {
+    local data = {}
+
+    data = {
         steps = 1,
         explosionChance = 7,
         sfxDeath = SFX_FOOD_TIMMY_DEATH
     }
     FoodDB.NewFoodUnit("Timmy", data)
+
+    data = {
+        steps = 3,
+        explosionChance = 4,
+        sfxDeath = SFX_FOOD_VILLAGERM_DEATH
+    }
+    FoodDB.NewFoodUnit("VillagerM", data)
 end
 
 return FoodDB
