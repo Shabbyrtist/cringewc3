@@ -2,11 +2,12 @@ local Active = {}
 
 local playerHandler = require("lib.PlayerHandler")
 local playerDragonHandler = require("lib.PlayerDragonHandler")
+local soundHandler = require("lib.SoundHandler")
+local trackHandler = require("lib.TrackHandler")
 local foodDB = require("lib.FoodDB")
 local bag = require("lib.Bag")
 
 function Active.PlayerChooseActionWithTheBag(p, playerAction)
-
     local pName = GetPlayerName(p)
 
     if playerAction == "bag" then
@@ -21,6 +22,7 @@ function Active.PlayerChooseActionWithTheBag(p, playerAction)
             --@debug-end@
 
             playerDragonHandler.MoveDragonForPlayer(p, foodDB.GetFoodSteps(food))
+            soundHandler.PlaySoundGlobal(foodDB.GetFoodSFX(food, "death"))
         else 
             print("Игрок " .. pName .. ": мешок пуст, пропускаем")
             playerAction = "stop"

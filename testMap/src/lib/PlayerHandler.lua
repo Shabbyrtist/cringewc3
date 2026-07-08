@@ -30,6 +30,14 @@ function PlayerHandler.GetIsDoneWithAction(p)
     return players[p].isDoneWithAction
 end
 
+function PlayerHandler.SetCurrentTrackSegment(p, v)
+    players[p].currentTrackSegment = v
+end
+
+function PlayerHandler.GetCurrentTrackSegment(p)
+    return players[p].currentTrackSegment
+end
+
 function PlayerHandler.Init()
     for i = 0, GetBJMaxPlayers() - 1 do
 
@@ -48,12 +56,13 @@ function PlayerHandler.Init()
 
             players[p] = {
                 isInGame = true,
-                explosionChance = 0,
-                vp = 0,
                 dragonUnit = nil,
                 trackStartRegion = nil,
                 foodBag = {},
-                isDoneWithAction = false
+                isDoneWithAction = false,
+                currentTrackSegment = 1,
+                explosionChance = 0,
+                vp = 0
             }
             
         end

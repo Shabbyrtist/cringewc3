@@ -2,8 +2,7 @@ local PlayerDragonHandler = {}
 
 function PlayerDragonHandler.MoveDragonForPlayer(p, steps)
     local playerHandler = require("lib.PlayerHandler")
-    local players = playerHandler.GetPlayers()
-    local dragon = players[p].dragonUnit
+    local dragon = playerHandler.GetPlayers()[p].dragonUnit
     local speed = 25
     local x = GetUnitX(dragon)
 
@@ -22,6 +21,7 @@ function PlayerDragonHandler.MoveDragonForPlayer(p, steps)
         tik = tik + 1
         if tik >= tiks then
             SetUnitPosition(dragon, x, targetY)
+            playerHandler.SetCurrentTrackSegment(p, playerHandler.GetCurrentTrackSegment(p) + steps)
             DestroyTimer(timer)
             return
         end

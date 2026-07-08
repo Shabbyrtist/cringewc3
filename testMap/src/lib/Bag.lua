@@ -1,5 +1,4 @@
 local Bag = {}
-local foodDB = require("lib.FoodDB")
 local playerHandler = require("lib.PlayerHandler")
 
 local function getFoodBag(p)
