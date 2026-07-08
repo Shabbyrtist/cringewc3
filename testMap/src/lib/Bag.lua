@@ -7,18 +7,12 @@ local function getFoodBag(p)
         return nil
     end
 
-    local player = playerHandler.GetPlayers()[p]
-    return player.foodBag
+    return playerHandler.GetPlayers()[p].foodBag
 end
 
 function Bag.AddFood(p, foodName)
     local bag = getFoodBag(p)
     if not bag then
-        return
-    end
-    
-    local foodUnit = foodDB.GetFoodUnit(foodName)
-    if not foodUnit then
         return
     end
 
@@ -50,9 +44,7 @@ function Bag.GetRandom(p)
 
     local index = GetRandomInt(1, #bag)
     local food = bag[index]
-
     table.remove(bag, index)
-
     return food
 end
 

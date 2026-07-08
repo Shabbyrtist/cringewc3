@@ -22,6 +22,14 @@ function PlayerHandler.AddVP(p, vp)
     players[p].vp = players[p].vp + vp
 end
 
+function PlayerHandler.SetIsDoneWithAction(p, b)
+    players[p].isDoneWithAction = b
+end
+
+function PlayerHandler.GetIsDoneWithAction(p)
+    return players[p].isDoneWithAction
+end
+
 function PlayerHandler.Init()
     for i = 0, GetBJMaxPlayers() - 1 do
 
@@ -44,7 +52,8 @@ function PlayerHandler.Init()
                 vp = 0,
                 dragonUnit = nil,
                 trackStartRegion = nil,
-                foodBag = {}
+                foodBag = {},
+                isDoneWithAction = false
             }
             
         end

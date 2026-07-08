@@ -1,7 +1,10 @@
 local GameStart = {}
 
 function GameStart.StartPhase()
+    
+    --@debug@
     print("Старт игры - Начало")
+    --@end-debug@
     
     local phaseHandler          = require("lib.PhaseHandler")
     local playerHandler         = require("lib.PlayerHandler")
@@ -32,14 +35,14 @@ function GameStart.StartPhase()
         print("Игрок " .. GetPlayerName(p) .. ": добавлено 4 Timmy, всего в мешке = " .. bag.Count(p)) 
         --@end-debug@   
 
-        -- без == p всегда true
-        if (GetLocalPlayer()) then
+        if (GetLocalPlayer() == p) then
             SelectUnit(dragon, true)
             SetCameraPosition(x, y)
         end
     end
 
     phaseHandler.NextState()
+
 end
 
 function GameStart.EndPhase()
