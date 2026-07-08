@@ -6,13 +6,24 @@ function Active.StartPhase()
     local phaseHandler = require("lib.PhaseHandler")
     local playerHandler = require("lib.PlayerHandler")
     local playerDragonHandler = require("lib.PlayerDragonHandler")
-    local foodDB = require("lib.FoodDB") 
+    local foodDB = require("lib.FoodDB")
+    local bag = require("lib.Bag")
 
     print("Текущий раунд " .. phaseHandler.GetCurrentRound())
 
     for p, data in pairs(playerHandler.GetPlayers()) do
-        local steps = foodDB.GetFoodUnitSteps(playerHandler.GetFoodBag(p)[1])
-        playerDragonHandler.MoveDragonForPlayer(p, steps)
+        local pId = GetPlayerId(p)
+
+        if bag.IsEmpty(p) then
+            print("Игрок " .. pId .. ": мешок пуст, пропускаем")
+            goto continue
+        end
+
+        local food = bag.GetRandom(p)
+        print("Игрок " .. pId .. ": вытащена еда у которой шанс'" .. food.explosionChance .. "', шагов: " .. food.steps)
+        
+        playerDragonHandler.MoveDragonForPlayer(p, food.steps)
+        ::continue::
     end
     --phaseHandler.NextState()
 end

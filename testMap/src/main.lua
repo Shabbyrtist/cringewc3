@@ -12,6 +12,7 @@ local playerHandler = require("lib.PlayerHandler")
 local spellHandler = require("lib.SpellHandler")
 local phaseHandler = require("lib.PhaseHandler")
 local foodDB = require("lib.FoodDB")
+local bag = require("lib.Bag")
 
 foodDB.Init()
 playerHandler.Init()

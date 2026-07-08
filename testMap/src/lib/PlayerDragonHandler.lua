@@ -7,10 +7,10 @@ function PlayerDragonHandler.MoveDragonForPlayer(p, steps)
     local speed = 25
     local x = GetUnitX(dragon)
 
+    local distance = steps * SETTINGS_TRACK_SEGMENTS_LENGTH 
     local currentY = GetUnitY(dragon)
-    
-    local targetY = currentY + steps * SETTINGS_TRACK_SEGMENTS_LENGTH
-    local distance = math.abs(targetY - currentY)
+    local targetY = currentY + distance
+    distance = math.abs(distance)
     
     local tik = 0
     local tiks = math.ceil(distance / speed)

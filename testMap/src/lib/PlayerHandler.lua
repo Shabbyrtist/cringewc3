@@ -22,13 +22,13 @@ function PlayerHandler.AddVP(p, vp)
     players[p].vp = players[p].vp + vp
 end
 
-function PlayerHandler.AddFoodIntoTheBag(p, newFoodUnitName)
+--[[function PlayerHandler.AddFoodIntoTheBag(p, newFoodUnitName)
     players[p].foodBag[#players[p].foodBag + 1] = newFoodUnitName
 end
 
 function PlayerHandler.GetFoodBag(p)
     return players[p].foodBag
-end
+end]]
 
 function PlayerHandler.Init()
 
