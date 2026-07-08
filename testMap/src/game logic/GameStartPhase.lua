@@ -7,13 +7,12 @@ function GameStart.StartPhase()
     local playerHandler         = require("lib.PlayerHandler")
     local playerDragonHandler   = require("lib.PlayerDragonHandler")
     local trackHandler          = require("lib.TrackHandler")
-    --local foodDB                = require("lib.FoodDB")
+    local foodDB                = require("lib.FoodDB")
     local bag                   = require("lib.Bag")
 
     for p, data in pairs(playerHandler.GetPlayers()) do
-        local pId = GetPlayerId(p)
 
-        local trackStartRegion = _G["gg_rct_trackStartPlayer" .. (pId + 1)]
+        local trackStartRegion = _G["gg_rct_trackStartPlayer" .. (GetPlayerId(p) + 1)]
         data.trackStartRegion = trackStartRegion
         local x = GetRectCenterX(trackStartRegion)
         local y = GetRectCenterY(trackStartRegion)
@@ -28,7 +27,10 @@ function GameStart.StartPhase()
         bag.AddFood(p, "Timmy")
         bag.AddFood(p, "Timmy")
         bag.AddFood(p, "Timmy")
-        print("Игрок " .. pId .. ": добавлено 4 Timmy, всего в мешке = " .. bag.Count(p))        
+
+        --@debug@
+        print("Игрок " .. GetPlayerName(p) .. ": добавлено 4 Timmy, всего в мешке = " .. bag.Count(p)) 
+        --@end-debug@   
 
         -- без == p всегда true
         if (GetLocalPlayer()) then

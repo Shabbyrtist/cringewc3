@@ -3,13 +3,13 @@ local PhaseHandler = {}
 -- Подключаем состояния
 local GameStart = require("game logic.GameStartPhase")
 local Active = require("game logic.ActivePhase")
-local Shop = require("game logic.ShopingPhase")
+local Shop = require("game logic.ShoppingPhase")
 local GameEnd = require("game logic.GameEndPhase")
 
 local states = {
     { name = "GameStart", module = GameStart},
     { name = "Active", module = Active},
-    { name = "Shoping", module = Shop},
+    { name = "Shopping", module = Shop},
     { name = "GameEnd", module = GameEnd}
     }
 

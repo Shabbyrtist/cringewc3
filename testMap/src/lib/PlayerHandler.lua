@@ -22,48 +22,33 @@ function PlayerHandler.AddVP(p, vp)
     players[p].vp = players[p].vp + vp
 end
 
---[[function PlayerHandler.AddFoodIntoTheBag(p, newFoodUnitName)
-    players[p].foodBag[#players[p].foodBag + 1] = newFoodUnitName
-end
-
-function PlayerHandler.GetFoodBag(p)
-    return players[p].foodBag
-end]]
-
 function PlayerHandler.Init()
+    for i = 0, GetBJMaxPlayers() - 1 do
 
-    --local trig = CreateTrigger()
-
-    --TriggerRegisterTimerEvent(trig, 0.01, false)
-    --TriggerAddAction(trig, function()
-
-        for i = 0, GetBJMaxPlayers() - 1 do
-
-            local p = Player(i)
+        local p = Player(i)
+        
+        --Если слот игрока для человека и он в игре
+        if GetPlayerController(p) == MAP_CONTROL_USER and GetPlayerSlotState(p) == PLAYER_SLOT_STATE_PLAYING then
             
-            --Если слот игрока для человека и он в игре
-            if GetPlayerController(p) == MAP_CONTROL_USER and GetPlayerSlotState(p) == PLAYER_SLOT_STATE_PLAYING then
-                
-                --создаем триггер на его лив
-                local trig = CreateTrigger()
+            --создаем триггер на его лив
+            local trig = CreateTrigger()
 
-                TriggerRegisterPlayerEvent(trig, p, EVENT_PLAYER_LEAVE)
-                TriggerAddAction(trig, function()
-                    PlayerHandler.onLeave(GetTriggerPlayer())
-                end)
+            TriggerRegisterPlayerEvent(trig, p, EVENT_PLAYER_LEAVE)
+            TriggerAddAction(trig, function()
+                PlayerHandler.onLeave(GetTriggerPlayer())
+            end)
 
-                players[p] = {
-                    isInGame = true,
-                    explosionChance = 0,
-                    vp = 0,
-                    dragonUnit = nil,
-                    trackStartRegion = nil,
-                    foodBag = {}
-                }
-                
-            end
+            players[p] = {
+                isInGame = true,
+                explosionChance = 0,
+                vp = 0,
+                dragonUnit = nil,
+                trackStartRegion = nil,
+                foodBag = {}
+            }
+            
         end
-    --end)
+    end
 end
 
 return PlayerHandler

@@ -12,18 +12,19 @@ function Active.StartPhase()
     print("Текущий раунд " .. phaseHandler.GetCurrentRound())
 
     for p, data in pairs(playerHandler.GetPlayers()) do
-        local pId = GetPlayerId(p)
 
         if bag.IsEmpty(p) then
-            print("Игрок " .. pId .. ": мешок пуст, пропускаем")
-            goto continue
+            print("Игрок " .. GetPlayerName(p) .. ": мешок пуст, пропускаем")
         end
 
         local food = bag.GetRandom(p)
-        print("Игрок " .. pId .. ": вытащена еда у которой шанс'" .. food.explosionChance .. "', шагов: " .. food.steps)
         
-        playerDragonHandler.MoveDragonForPlayer(p, food.steps)
-        ::continue::
+        --@debug@
+        print("Игрок " .. GetPlayerName(p) .. ": вытащена еда у которой шанс " .. foodDB.GetFoodExplosionChance(food) ..
+            ", шагов: " .. foodDB.GetFoodSteps(food))
+        --@debug-end@
+
+        playerDragonHandler.MoveDragonForPlayer(p, foodDB.GetFoodSteps(food))
     end
     --phaseHandler.NextState()
 end
