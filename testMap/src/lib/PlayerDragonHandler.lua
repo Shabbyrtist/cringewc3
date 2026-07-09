@@ -11,8 +11,7 @@ local function EndOfMovement(p)
     --@debug-end@
 
     if isExploded then
-        DestroyEffect(AddSpecialEffect(MDL_MEAT_EXPLOSION, GetUnitX(dragon), GetUnitY(dragon)))
-        activePhase.PlayerAction(p, "stop")
+        activePhase.PlayerAction(p, "exploded")
     end
 end
 
@@ -24,7 +23,7 @@ function PlayerDragonHandler.IsPlayerDragonExploded(p)
     return chance, (chance < playerExplosionChance) and (playerExplosionChance > playerExplosionChanceTrashhold)
 end
 
-function PlayerDragonHandler.MovePlayerDragon(p, steps)
+function PlayerDragonHandler.MovePlayerDragon(p, steps, callbackEnd)
     local dragon = playerHandler.GetDragonUnit(p)
     local speed = 25
     local x = GetUnitX(dragon)
@@ -45,7 +44,8 @@ function PlayerDragonHandler.MovePlayerDragon(p, steps)
         if tik >= tiks then
             SetUnitPosition(dragon, x, targetY)
             playerHandler.SetCurrentTrackSegment(p, playerHandler.GetCurrentTrackSegment(p) + steps)
-            EndOfMovement(p)
+            --EndOfMovement(p)
+            callbackEnd()
             DestroyTimer(timer)
             return
         end

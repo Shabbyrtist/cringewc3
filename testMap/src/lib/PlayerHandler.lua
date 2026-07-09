@@ -54,6 +54,14 @@ function PlayerHandler.GetDragonUnit(p)
     return players[p].dragonUnit
 end
 
+function PlayerHandler.SetHeroUnit(p, hero)
+    players[p].heroUnit = hero
+end
+
+function PlayerHandler.GetHeroUnit(p)
+    return players[p].heroUnit
+end
+
 function PlayerHandler.GetExplosionChanceTrashhold(p)
     return players[p].explosionChanceTrashhold
 end
@@ -78,6 +86,7 @@ function PlayerHandler.Init()
                 isInGame = true,
 
                 dragonUnit = nil,
+                heroUnit = nil,
                 trackStartRegion = nil,
 
                 foodBag = {},

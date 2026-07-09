@@ -8,10 +8,13 @@ SETTINGS_ROUND_NUMBER = 3;
 SETTINGS_TRACK_SEGMENTS_NUMBER = 50;
 SETTINGS_TRACK_SEGMENTS_LENGTH = 256;
 
+SFX_FOOD_TIMMY_HELLO = "units\\critters\\villagerkid\\villagercwhat1.wav"
 SFX_FOOD_TIMMY_DEATH = "units\\critters\\villagerkid\\villagerchilddeath1.wav"
+SFX_FOOD_VILLAGERM_HELLO = "units\\critters\\villagerman\\villagerm3.wav"
 SFX_FOOD_VILLAGERM_DEATH = "units\\critters\\villagerman\\villagermaledeath1.wav"
 
-MDL_MEAT_EXPLOSION = "Objects\\Spawnmodels\\Human\\HumanLargeDeathExplode\\HumanLargeDeathExplode.mdl"
+MDL_MEATEXPLOSION = "Objects\\Spawnmodels\\Human\\HumanLargeDeathExplode\\HumanLargeDeathExplode.mdl"
+MDL_MEATMISSILE = "Abilities\\Weapons\\MeatwagonMissile\\MeatwagonMissile.mdl"
 
 local playerHandler = require("lib.PlayerHandler")
 local spellHandler = require("lib.SpellHandler")
@@ -23,5 +26,3 @@ foodDB.Init()
 playerHandler.Init()
 spellHandler.Init()
 phaseHandler.Init()
-
-CreateUnit(Player(0), FourCC('H101'), 219.4, -90.4, 293.630)

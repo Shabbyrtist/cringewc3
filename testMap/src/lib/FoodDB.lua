@@ -31,6 +31,10 @@ function FoodDB.GetFoodSFX(foodName, sfxType)
         return 0
     end
 
+    if sfxType == "hello" then
+        return foodUnits[foodName].data.sfxHello
+    end
+
     if sfxType == "death" then
         return foodUnits[foodName].data.sfxDeath
     end
@@ -48,6 +52,7 @@ function FoodDB.Init()
     data = {
         steps = 1,
         explosionChance = 7,
+        sfxHello = SFX_FOOD_TIMMY_HELLO,
         sfxDeath = SFX_FOOD_TIMMY_DEATH
     }
     FoodDB.NewFoodUnit("Timmy", data)
@@ -55,6 +60,7 @@ function FoodDB.Init()
     data = {
         steps = 3,
         explosionChance = 4,
+        sfxHello = SFX_FOOD_VILLAGERM_HELLO,
         sfxDeath = SFX_FOOD_VILLAGERM_DEATH
     }
     FoodDB.NewFoodUnit("VillagerM", data)
