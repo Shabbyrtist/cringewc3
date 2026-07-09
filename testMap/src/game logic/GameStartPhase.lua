@@ -39,7 +39,8 @@ function GameStart.StartPhase()
 
         if (GetLocalPlayer() == p) then
             SelectUnit(dragon, true)
-            SetCameraPosition(x, y)
+            --SetCameraPosition(x, y)
+            SetCameraTargetControllerNoZForPlayer(p, dragon, 0, 0, false)   
         end
     end
 

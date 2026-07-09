@@ -7,7 +7,7 @@ local trackHandler = require("lib.TrackHandler")
 local foodDB = require("lib.FoodDB")
 local bag = require("lib.Bag")
 
-local function PlayersDoneCheck()
+local function CheckIsAllPlayersDone()
     local phaseHandler = require("lib.PhaseHandler")
 
     for p, data in pairs(playerHandler.GetPlayers()) do
@@ -35,6 +35,13 @@ local function PlayerBagPullAction(p)
     soundHandler.PlaySoundGlobal(foodDB.GetFoodSFX(food, "death"))
 end
 
+local function PlayerExplodedEffect(p)
+    local pName = GetPlayerName(p)
+    local dragon = playerHandler.GetDragonUnit(p)
+    
+    DestroyEffect(AddSpecialEffect(MDL_MEAT_EXPLOSION, GetUnitX(dragon), GetUnitY(dragon)))
+end
+
 function Active.PlayerAction(p, playerAction)
     local pName = GetPlayerName(p)
 
@@ -42,16 +49,25 @@ function Active.PlayerAction(p, playerAction)
         
         if not bag.BufferIsEmpty(p) then
             PlayerBagPullAction(p)
+            return
         else 
             print("Игрок " .. pName .. ": мешок пуст, пропускаем")
-            playerAction = "stop"
+            Active.PlayerAction(p, "stop")
+            return
         end
 
     end
 
     if playerAction == "stop" then
         playerHandler.SetIsDoneWithAction(p, true)
-        PlayersDoneCheck()
+        CheckIsAllPlayersDone()
+        return
+    end
+
+    if playerAction == "exploded" then
+        PlayerExplodedEffect(p)
+        Active.PlayerAction(p, "stop")
+        return
     end
 end
 

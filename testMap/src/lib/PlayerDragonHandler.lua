@@ -65,7 +65,6 @@ function PlayerDragonHandler.ResetPosition(p)
         
     if (GetLocalPlayer() == p) then
         SelectUnit(dragon, true)
-        SetCameraPosition(x, y)
     end
 end
 
