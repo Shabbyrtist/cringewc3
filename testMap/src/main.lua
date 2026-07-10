@@ -15,6 +15,10 @@ SFX_FOOD_VILLAGERM_DEATH = "units\\critters\\villagerman\\villagermaledeath1.wav
 SFX_FOOD_VILLAGERF_HELLO = "units\\critters\\villagerwoman\\villagerf1.wav"
 SFX_FOOD_VILLAGERF_DEATH = "units\\human\\sorceress\\sorceressdeath.wav"
 
+MDL_FOOD_TIMMY = "units\\critters\\VillagerKid\\VillagerKid"
+MDL_FOOD_VILLAGERM = "units\\critters\\VillagerMan1\\VillagerMan1"
+MDL_FOOD_VILLAGERF = "units\\critters\\VillagerWoman\\VillagerWoman"
+
 MDL_MEATEXPLOSION = "Objects\\Spawnmodels\\Human\\HumanLargeDeathExplode\\HumanLargeDeathExplode.mdl"
 MDL_MEATMISSILE = "Abilities\\Weapons\\MeatwagonMissile\\MeatwagonMissile.mdl"
 

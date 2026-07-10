@@ -93,7 +93,7 @@ function PlayerHandler.Init()
                 bufferFoodBag = {},
 
                 isDoneWithAction = false,
-                currentTrackSegment = 1,
+                currentTrackSegment = 0,
 
                 explosionChance = 0,
                 explosionChanceTrashhold = 15,

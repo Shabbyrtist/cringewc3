@@ -62,10 +62,13 @@ function PlayerDragonHandler.ResetPosition(p)
     local y = trackHandler.GetPlayerTrackSegmentY(p, 0)
 
     SetUnitPosition(dragon, x, y)
-    playerHandler.SetCurrentTrackSegment(p, 1)
+    playerHandler.SetCurrentTrackSegment(p, 0)
 
     for i = 0, SETTINGS_TRACK_SEGMENTS_NUMBER do
-        trackHandler.SetPlayerTrackSegmentFoodName(p, "")
+        if trackHandler.GetPlayerTrackSegmentFoodName ~= "" then
+            DestroyEffect(trackHandler.GetPlayerTrackSegmentFoodEffect(p, i))
+            trackHandler.SetPlayerTrackSegmentFoodName(p, i, "")
+        end
     end
         
     if (GetLocalPlayer() == p) then

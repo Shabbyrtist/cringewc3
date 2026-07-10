@@ -112,22 +112,18 @@ local function PlayerBagPullAction(p)
     local foodSteps = foodDB.GetFoodStepsForPlayer(foodName, p)
     local foodHelloFX = foodDB.GetFoodSFX(foodName, "hello")
     local foodDeathSFX = foodDB.GetFoodSFX(foodName, "death")
-    local currentPlayerTrackSegment = playerHandler.GetCurrentTrackSegment(p)
-
-    trackHandler.SetPlayerTrackSegmentFoodName(p, currentPlayerTrackSegment, foodName)
-
-    --@debug@
-    print(pName .. ": вытащена еда " .. ". Шанс взрыва повышен на " .. foodExplosionChance .. "%, сделано шагов: " .. foodSteps)
-    --@debug-end@
-    
+    local currentTrackSegment = playerHandler.GetCurrentTrackSegment(p)
     local newExplosionChance = playerHandler.GetExplosionChance(p) + foodExplosionChance
+
     playerHandler.SetExplosionChance(p, newExplosionChance)
 
     soundHandler.PlaySoundForPlayer(p, foodHelloFX)
+
     PlayerHeroFoodAnimationStart(p, foodName, function()
         playerDragonHandler.MovePlayerDragon(p, foodSteps, function()
             EndOfDargonMovement(p,function()
-                playerHandler.SetCurrentTrackSegment(p, currentPlayerTrackSegment + foodSteps)
+                playerHandler.SetCurrentTrackSegment(p, currentTrackSegment + foodSteps)
+                trackHandler.SetPlayerTrackSegmentFoodName(p, currentTrackSegment + foodSteps, foodName)
             end)
         end)
         soundHandler.PlaySoundForPlayer(p, foodDeathSFX)

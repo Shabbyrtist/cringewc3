@@ -10,27 +10,14 @@ function FoodDB.GetFoodUnits()
 end
 
 function FoodDB.GetFoodStepsForPlayer(foodName, p)
-    if not foodUnits[foodName] then
-        print("ERROR: Food unit not found: " .. tostring(foodName))
-        return 0
-    end
     return foodUnits[foodName].data.steps(p)
 end
 
 function FoodDB.GetFoodExplosionChance(foodName)
-    if not foodUnits[foodName] then
-        print("ERROR: Food unit not found: " .. tostring(foodName))
-        return 0
-    end
     return foodUnits[foodName].data.explosionChance
 end
 
 function FoodDB.GetFoodSFX(foodName, sfxType)
-    if not foodUnits[foodName] then
-        print("ERROR: Food unit not found: " .. tostring(foodName))
-        return 0
-    end
-
     if sfxType == "hello" then
         return foodUnits[foodName].data.sfxHello
     end
@@ -40,8 +27,8 @@ function FoodDB.GetFoodSFX(foodName, sfxType)
     end
 end
 
-function FoodDB.FoodInitCallBackForPlayer(foodName, p)
-    foodUnits[foodName].data.initCallback(p)
+function FoodDB.GetFoodMDL(foodName)
+    return foodUnits[foodName].data.mdl
 end
 
 function FoodDB.NewFoodUnit(foodName, data)
@@ -52,6 +39,8 @@ end
 
 
 function FoodDB.Init()
+    local playerHandler = require("lib.PlayerHandler")
+    local trackHandler = require("lib.TrackHandler")
     local data = {}
 
     data = {
@@ -59,53 +48,41 @@ function FoodDB.Init()
         explosionChance = 7,
         sfxHello = SFX_FOOD_TIMMY_HELLO,
         sfxDeath = SFX_FOOD_TIMMY_DEATH,
-        initCallback = function()end,
-        postCallback = function()end
+        mdl = MDL_FOOD_TIMMY
     }
     FoodDB.NewFoodUnit("Timmy", data)
 
     data = {
-        steps = function() return 3 end,
-        explosionChance = 4,
-        cost = 5,
+        steps = function() return 2 end,
+        explosionChance = 3,
+        cost = 4,
         sfxHello = SFX_FOOD_VILLAGERM_HELLO,
         sfxDeath = SFX_FOOD_VILLAGERM_DEATH,
-        initCallback = function()end,
-        postCallback = function()end
+        mdl = MDL_FOOD_VILLAGERM
     }
     FoodDB.NewFoodUnit("VillagerM", data)
 
     data = {
         steps = function(p)
-            local playerHandler = require("lib.PlayerHandler")
-            local trackHandler = require("lib.TrackHandler")
-            local steps = 1
-
+            local steps = 2
             local currentTrackSegment = playerHandler.GetCurrentTrackSegment(p)
-            local lastTrackSegment = currentTrackSegment - 1
-            local lastFoodName = ""
-
-            while (lastTrackSegment > 0 and lastFoodName == "") do
-                lastFoodName = trackHandler.GetPlayerTrackSegmentFoodName(p, lastTrackSegment)
-                lastTrackSegment = lastTrackSegment - 1
-            end
+            local lastFoodName = trackHandler.GetPlayerTrackSegmentFoodName(p, currentTrackSegment)
 
             if lastFoodName == "VillagerF" then
                 steps = 1
             elseif lastFoodName == "VillagerM" then
-                steps = 4   
+                steps = 3  
             elseif lastFoodName == "Timmy" then
                 steps = 2 
             end
 
             return steps
         end,
-        explosionChance = 3,
-        cost = 5,
+        explosionChance = 4,
+        cost = 6,
         sfxHello = SFX_FOOD_VILLAGERF_HELLO,
         sfxDeath = SFX_FOOD_VILLAGERF_DEATH,
-        initCallback = function(p) end,
-        postCallback = function(p) end
+        mdl = MDL_FOOD_VILLAGERF
     }
     FoodDB.NewFoodUnit("VillagerF", data)
 end
