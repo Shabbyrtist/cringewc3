@@ -7,6 +7,8 @@ function PlayerHeroHandler.CreateHeroForPlayer(p)
     
     UnitRemoveAbility(hero, FourCC('Aatk'))
     UnitRemoveAbility(hero, FourCC('Amov'))
+    UnitRemoveAbility(hero, FourCC('Aens'))
+    UnitRemoveAbility(hero, FourCC('Asal'))
     UnitAddAbility(hero, FourCC('Avul'))
     SetUnitScale(hero, scale, scale, scale)
     

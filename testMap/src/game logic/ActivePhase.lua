@@ -1,11 +1,11 @@
 local Active = {}
 
-local playerHandler = require("lib.PlayerHandler")
-local playerDragonHandler = require("lib.PlayerDragonHandler")
-local soundHandler = require("lib.SoundHandler")
-local trackHandler = require("lib.TrackHandler")
-local foodDB = require("lib.FoodDB")
-local bag = require("lib.Bag")
+local playerHandler         = require("lib.PlayerHandler")
+local playerDragonHandler   = require("lib.PlayerDragonHandler")
+local soundHandler          = require("lib.SoundHandler")
+local trackHandler          = require("lib.TrackHandler")
+local foodDB                = require("lib.FoodDB")
+local bag                   = require("lib.Bag")
 
 local function CheckIsAllPlayersDone()
     local phaseHandler = require("lib.PhaseHandler")
@@ -19,8 +19,8 @@ local function CheckIsAllPlayersDone()
     return true
 end
 
-local function EndOfDargonMovement(p)
-    local chance = 1--GetRandomInt(1, 100)
+local function EndOfDargonMovement(p, callbackDoesntExplode)
+    local chance = GetRandomInt(1, 100)
     local playerExplosionChance = playerHandler.GetExplosionChance(p)
     local playerExplosionChanceTrashhold = playerHandler.GetExplosionChanceTrashhold(p)
 
@@ -32,6 +32,8 @@ local function EndOfDargonMovement(p)
 
     if isExploded then
         Active.PlayerAction(p, "exploded")
+    else
+        callbackDoesntExplode()
     end
 end
 
@@ -106,11 +108,13 @@ end
 local function PlayerBagPullAction(p)
     local pName = GetPlayerName(p)
     local foodName = bag.BufferGetRandom(p)
-
     local foodExplosionChance = foodDB.GetFoodExplosionChance(foodName)
-    local foodSteps = foodDB.GetFoodSteps(foodName)
+    local foodSteps = foodDB.GetFoodStepsForPlayer(foodName, p)
     local foodHelloFX = foodDB.GetFoodSFX(foodName, "hello")
     local foodDeathSFX = foodDB.GetFoodSFX(foodName, "death")
+    local currentPlayerTrackSegment = playerHandler.GetCurrentTrackSegment(p)
+
+    trackHandler.SetPlayerTrackSegmentFoodName(p, currentPlayerTrackSegment, foodName)
 
     --@debug@
     print(pName .. ": вытащена еда " .. ". Шанс взрыва повышен на " .. foodExplosionChance .. "%, сделано шагов: " .. foodSteps)
@@ -122,7 +126,9 @@ local function PlayerBagPullAction(p)
     soundHandler.PlaySoundForPlayer(p, foodHelloFX)
     PlayerHeroFoodAnimationStart(p, foodName, function()
         playerDragonHandler.MovePlayerDragon(p, foodSteps, function()
-            EndOfDargonMovement(p)
+            EndOfDargonMovement(p,function()
+                playerHandler.SetCurrentTrackSegment(p, currentPlayerTrackSegment + foodSteps)
+            end)
         end)
         soundHandler.PlaySoundForPlayer(p, foodDeathSFX)
     end)

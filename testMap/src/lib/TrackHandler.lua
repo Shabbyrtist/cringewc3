@@ -9,6 +9,14 @@ function TrackHandler.GetPlayerTrackSegmentY(p, i)
     return track[p].segments[i].y
 end
 
+function TrackHandler.SetPlayerTrackSegmentFoodName(p, i, foodName)
+    track[p].segments[i].foodName = foodName
+end
+
+function TrackHandler.GetPlayerTrackSegmentFoodName(p, i)
+    return track[p].segments[i].foodName
+end
+
 function TrackHandler.CreateTrackForPlayer(p)
         local playerHandler = require("lib.PlayerHandler")
         local players = playerHandler.GetPlayers()
@@ -32,7 +40,8 @@ function TrackHandler.CreateTrackForPlayer(p)
             track[p].segments[i] = {
                 y = y + yy,
                 textTag = tt,
-                index = i
+                index = i,
+                foodName = ""
             }
             SetTextTagText(tt, s, ttS)
             SetTextTagPos(tt, x, y + yy, ttH) 

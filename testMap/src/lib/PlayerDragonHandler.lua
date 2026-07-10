@@ -62,6 +62,11 @@ function PlayerDragonHandler.ResetPosition(p)
     local y = trackHandler.GetPlayerTrackSegmentY(p, 0)
 
     SetUnitPosition(dragon, x, y)
+    playerHandler.SetCurrentTrackSegment(p, 1)
+
+    for i = 0, SETTINGS_TRACK_SEGMENTS_NUMBER do
+        trackHandler.SetPlayerTrackSegmentFoodName(p, "")
+    end
         
     if (GetLocalPlayer() == p) then
         SelectUnit(dragon, true)

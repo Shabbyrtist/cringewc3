@@ -29,17 +29,21 @@ function GameStart.StartPhase()
         SetUnitPosition(hero, x - 256., y)
 
         trackHandler.CreateTrackForPlayer(p)
+        playerHandler.SetCurrentTrackSegment(p, 1)
 
-        bag.AddFood(p, "Timmy")
-        bag.AddFood(p, "Timmy")
-        bag.AddFood(p, "Timmy")
-        bag.AddFood(p, "Timmy")
         bag.AddFood(p, "VillagerM")
         bag.AddFood(p, "VillagerM")
-
-        --@debug@
-        print("Игрок " .. GetPlayerName(p) .. ": добавлено 4 Timmy, всего в мешке = " .. bag.BufferCount(p)) 
-        --@end-debug@
+        bag.AddFood(p, "VillagerM")
+        bag.AddFood(p, "VillagerM")
+        bag.AddFood(p, "VillagerF")
+        bag.AddFood(p, "VillagerF")
+        bag.AddFood(p, "VillagerF")
+        bag.AddFood(p, "VillagerF")
+        bag.AddFood(p, "Timmy")
+        bag.AddFood(p, "Timmy")
+        bag.AddFood(p, "Timmy")
+        bag.AddFood(p, "Timmy")
+        bag.AddFood(p, "Timmy")
 
         if (GetLocalPlayer() == p) then
             SelectUnit(dragon, true)
