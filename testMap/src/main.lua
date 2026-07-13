@@ -31,4 +31,5 @@ local bag = require("lib.Bag")
 foodDB.Init()
 playerHandler.Init()
 spellHandler.Init()
+
 phaseHandler.Init()
