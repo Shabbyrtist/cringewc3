@@ -15,15 +15,13 @@ end
 function TrackHandler.SetPlayerTrackSegmentFoodName(p, i, foodName)
     track[p].segments[i].foodName = foodName
     if foodName ~= "" then
-        if GetLocalPlayer() == p then
-            local i = playerHandler.GetCurrentTrackSegment(p)
-            local x = TrackHandler.GetPlayerTrackX(p)
-            local y = TrackHandler.GetPlayerTrackSegmentY(p, i)
-            local eff = AddSpecialEffect(foodDB.GetFoodMDL(foodName), x, y)
-            TrackHandler.SetPlayerTrackSegmentFoodEffect(p, i, eff)
-            BlzSetSpecialEffectAlpha(eff, 175)
-            BlzSetSpecialEffectScale(eff, 2)
-        end
+        local i = playerHandler.GetCurrentTrackSegment(p)
+        local x = TrackHandler.GetPlayerTrackX(p)
+        local y = TrackHandler.GetPlayerTrackSegmentY(p, i)
+        local eff = AddSpecialEffect(foodDB.GetFoodMDL(foodName), x, y)
+        TrackHandler.SetPlayerTrackSegmentFoodEffect(p, i, eff)
+        BlzSetSpecialEffectAlpha(eff, 175)
+        BlzSetSpecialEffectScale(eff, 2)
     end
 end
 
