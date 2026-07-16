@@ -19,24 +19,6 @@ local function CheckIsAllPlayersDone()
     return true
 end
 
-local function EndOfDargonMovement(p, callbackDoesntExplode)
-    local chance = GetRandomInt(1, 100)
-    local playerExplosionChance = playerHandler.GetExplosionChance(p)
-    local playerExplosionChanceTrashhold = playerHandler.GetExplosionChanceTrashhold(p)
-
-    isExploded = (chance < playerExplosionChance) and (playerExplosionChance > playerExplosionChanceTrashhold)
-
-    --@debug@
-    print("Выпашее значение: " .. chance .. "; Шанс взрыва: " .. playerHandler.GetExplosionChance(p))
-    --@debug-end@
-
-    if isExploded then
-        Active.PlayerAction(p, "exploded")
-    else
-        callbackDoesntExplode()
-    end
-end
-
 local function PlayerExplodedEffect(p)
     local pName = GetPlayerName(p)
     local dragon = playerHandler.GetDragonUnit(p)
@@ -52,6 +34,24 @@ local function PlayerExplodedEffect(p)
     TimerStart(timer, 1, false, function()
         DelayEffect()
     end)
+end
+
+local function EndOfDargonMovement(p, callbackDoesntExplode)
+    local chance = GetRandomInt(1, 100)
+    local playerExplosionChance = playerHandler.GetExplosionChance(p)
+    local playerExplosionChanceTrashhold = playerHandler.GetExplosionChanceTrashhold(p)
+
+    isExploded = (chance < playerExplosionChance) and (playerExplosionChance > playerExplosionChanceTrashhold)
+
+    --@debug@
+    print("Выпашее значение: " .. chance .. "; Шанс взрыва: " .. playerHandler.GetExplosionChance(p))
+    --@debug-end@
+
+    if isExploded then
+        PlayerExplodedEffect(p)
+    else
+        callbackDoesntExplode()
+    end
 end
 
 local function PlayerHeroFoodAnimationStart(p, foodName, callbackEnd)
@@ -149,11 +149,6 @@ function Active.PlayerAction(p, playerAction)
     if playerAction == "stop" then
         playerHandler.SetIsDoneWithAction(p, true)
         CheckIsAllPlayersDone()
-        return
-    end
-
-    if playerAction == "exploded" then
-        PlayerExplodedEffect(p)
         return
     end
 end
