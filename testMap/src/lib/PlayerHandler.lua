@@ -79,7 +79,7 @@ function PlayerHandler.Init()
 
             TriggerRegisterPlayerEvent(trig, p, EVENT_PLAYER_LEAVE)
             TriggerAddAction(trig, function()
-                PlayerHandler.onLeave(GetTriggerPlayer())
+                PlayerHandler.OnLeave(GetTriggerPlayer())
             end)
 
             players[p] = {

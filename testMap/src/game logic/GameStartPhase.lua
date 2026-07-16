@@ -13,13 +13,16 @@ function GameStart.StartPhase()
     local trackHandler          = require("lib.TrackHandler")
     local foodDB                = require("lib.FoodDB")
     local bag                   = require("lib.Bag")
-
+    local gameUIController      = require("ui.GameUiController")
+    
     for p, data in pairs(playerHandler.GetPlayers()) do
 
         local trackStartRegion = _G["gg_rct_trackStartPlayer" .. (GetPlayerId(p) + 1)]
         data.trackStartRegion = trackStartRegion
         local x = GetRectCenterX(trackStartRegion)
         local y = GetRectCenterY(trackStartRegion)
+
+        gameUIController.CreatePlayerUI(p)
 
         local dragon = playerDragonHandler.CreateDragonForPlayer(p)
         local hero = playerHeroHandler.CreateHeroForPlayer(p)
@@ -31,7 +34,7 @@ function GameStart.StartPhase()
         trackHandler.CreateTrackForPlayer(p)
         playerHandler.SetCurrentTrackSegment(p, 1)
 
-        bag.AddFood(p, "VillagerM")
+        --[[bag.AddFood(p, "VillagerM")
         bag.AddFood(p, "VillagerM")
         bag.AddFood(p, "VillagerM")
         bag.AddFood(p, "VillagerM")
@@ -41,7 +44,7 @@ function GameStart.StartPhase()
         bag.AddFood(p, "VillagerF")
         bag.AddFood(p, "Timmy")
         bag.AddFood(p, "Timmy")
-        bag.AddFood(p, "Timmy")
+        bag.AddFood(p, "Timmy")]]
         bag.AddFood(p, "Timmy")
         bag.AddFood(p, "Timmy")
 
