@@ -118,6 +118,90 @@ function UI.CreateText(options)
 end
 
 
+local function CreateTooltip(parent, text)
+    local tooltip = BlzCreateFrameByType(
+        "BACKDROP",
+        "",
+        UI.GetGameUI(),
+        "",
+        NextContext()
+    )
+
+    BlzFrameSetTexture(
+        tooltip,
+        DEFAULT_PANEL_TEXTURE,
+        0,
+        true
+    )
+
+    BlzFrameSetSize(
+        tooltip,
+        0.18,
+        0.045
+    )
+
+    local tooltipText = BlzCreateFrameByType(
+        "TEXT",
+        "",
+        tooltip,
+        "",
+        NextContext()
+    )
+
+    BlzFrameSetText(
+        tooltipText,
+        text or ""
+    )
+
+    BlzFrameSetFont(
+        tooltipText,
+        DEFAULT_FONT,
+        0.011,
+        0
+    )
+
+    BlzFrameSetTextAlignment(
+        tooltipText,
+        TEXT_JUSTIFY_MIDDLE,
+        TEXT_JUSTIFY_CENTER
+    )
+
+    BlzFrameSetPoint(
+        tooltipText,
+        FRAMEPOINT_CENTER,
+        tooltip,
+        FRAMEPOINT_CENTER,
+        0.0,
+        0.0
+    )
+
+    BlzFrameSetSize(
+        tooltipText,
+        0.16,
+        0.035
+    )
+
+    BlzFrameSetEnable(tooltip, false)
+    BlzFrameSetEnable(tooltipText, false)
+
+    BlzFrameSetPoint(
+        tooltip,
+        FRAMEPOINT_BOTTOM,
+        parent,
+        FRAMEPOINT_TOP,
+        0.0,
+        0.01
+    )
+
+    BlzFrameSetVisible(
+        tooltip,
+        false
+    )
+
+    return tooltip
+end
+
+
 -- Вспомогательная ф-ия для создания функционала кнопки
 local function RegisterClick(component, onClick)
     local trigger = CreateTrigger()
@@ -165,10 +249,23 @@ function UI.CreateButton(options)
     local component = {
         button = button,
         trigger = nil,
+        tooltip = nil,
         --enabled = options.enabled ~= false,
     }
 
     component.trigger = RegisterClick(component, options.onClick)
+
+    if options.tooltip then
+        component.tooltip = CreateTooltip(
+            button,
+            options.tooltip
+        )
+
+        BlzFrameSetTooltip(
+            button,
+            component.tooltip
+        )
+    end
 
     if options.visible ~= nil then
         BlzFrameSetVisible(frame, options.visible)
@@ -221,10 +318,23 @@ function UI.CreateIconButton(options)
         button = button,
         icon = icon,
         trigger = nil,
+        tooltip = nil,
         --enabled = options.enabled ~= false,
     }
 
     component.trigger = RegisterClick(component, options.onClick)
+
+    if options.tooltip then
+        component.tooltip = CreateTooltip(
+            button,
+            options.tooltip
+        )
+
+        BlzFrameSetTooltip(
+            button,
+            component.tooltip
+        )
+    end
 
     if options.visible ~= nil then
         BlzFrameSetVisible(button, options.visible)

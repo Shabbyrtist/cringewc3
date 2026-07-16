@@ -47,7 +47,7 @@ function TakeFood.Create(p, callback)
 
     local counterText = UI.CreateText({
         parent = root,
-        text = "Count of bag:" .. bag.BufferCount(p),
+        text = "The amount of food:" .. bag.BufferCount(p),
         fontSize = 0.012,
         width = 0.16,
         height = 0.025,
@@ -67,6 +67,8 @@ function TakeFood.Create(p, callback)
 
         icon =
             "ReplaceableTextures\\CommandButtons\\BTNPickUpItem.blp",
+    
+        tooltip = "Take food from the bag",
 
         width = 0.05,
         height = 0.05,
@@ -151,7 +153,7 @@ function TakeFood.SetCount(p)
 
     UI.SetText(
         window.counterText,
-        "Count of bag: " .. tostring(count)
+        "The amount of food: " .. tostring(count)
     )
 end
 
