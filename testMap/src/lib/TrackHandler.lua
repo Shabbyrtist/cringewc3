@@ -78,10 +78,9 @@ local z = 0
 function TrackHandler.DrawFood()
     a = (a + 5) % 361 
     z = -175 + math.sin(math.rad(a)*3) * 25
-    local localPlayer = GetLocalPlayer()
 
     for p, data in pairs(playerHandler.GetPlayers()) do
-        if playerHandler.IsActive and localPlayer == p then
+        if playerHandler.IsActive then
             for i = 0, SETTINGS_TRACK_SEGMENTS_NUMBER do
                 local foodName = TrackHandler.GetPlayerTrackSegmentFoodName(p, i)
                 if  foodName ~= "" then
