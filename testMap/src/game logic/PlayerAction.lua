@@ -6,6 +6,7 @@ local soundHandler          = require("lib.SoundHandler")
 local trackHandler          = require("lib.TrackHandler")
 local foodDB                = require("lib.FoodDB")
 local bag                   = require("lib.Bag")
+local takeFood              = require("ui.TakeFood")
 
 
 local function CheckIsAllPlayersDone()
@@ -13,11 +14,11 @@ local function CheckIsAllPlayersDone()
 
     for p, data in pairs(playerHandler.GetPlayers()) do
         if not playerHandler.GetIsDoneWithAction(p) then
-            return false
+            return
         end
     end
+
     phaseHandler.NextState()
-    return true
 end
 
 local function FinishPlayerAction(p)
@@ -48,7 +49,7 @@ local function PlayerExplodedEffect(p, onComplete)
 end
 
 function PlayerAction.CheckExplosion(p)
-    local chance = GetRandomInt(1, 100)
+    local chance = 101--GetRandomInt(1, 100)
     local playerExplosionChance = playerHandler.GetExplosionChance(p)
     local playerExplosionChanceTrashhold = playerHandler.GetExplosionChanceTrashhold(p)
 
@@ -58,7 +59,6 @@ function PlayerAction.CheckExplosion(p)
 
     return (chance < playerExplosionChance) and (playerExplosionChance > playerExplosionChanceTrashhold)
 end
-
 
 local function PlayerHeroFoodAnimationStart(p, foodName, callbackEnd)
 
@@ -89,30 +89,28 @@ local function PlayerHeroFoodAnimationStart(p, foodName, callbackEnd)
     local arcHeight = math.max(50, distance * heightMultiplier / 8)
 
     local timer = CreateTimer()
-
-    local function MoveEffect()
-        currentTime = currentTime + 0.03
-        if currentTime >= time then
-            callbackEnd()
-            DestroyTimer(timer)
-            DestroyEffect(eff)
-            return
-        end
-        local t = currentTime / time
-        local currentX = x + dx * t
-        local currentY = y + dy * t
-        local currentZ = z + dz * t + arcHeight * 4 * t * (1 - t)
-
-        BlzSetSpecialEffectPosition(eff, currentX, currentY, currentZ)
-    end
     
-    TimerStart(timer, 0.03, true, function()
-        MoveEffect()
-    end)
+    TimerStart(timer, 0.03, true,
+        function()
+            currentTime = currentTime + 0.03
+            if currentTime >= time then
+                callbackEnd()
+                DestroyTimer(timer)
+                DestroyEffect(eff)
+                return
+            end
+            local t = currentTime / time
+            local currentX = x + dx * t
+            local currentY = y + dy * t
+            local currentZ = z + dz * t + arcHeight * 4 * t * (1 - t)
+
+            BlzSetSpecialEffectPosition(eff, currentX, currentY, currentZ)
+        end
+    )
 end
 
 
-function PlayerAction.PullFromBag(p, onComplete)
+function PlayerAction.PullFromBag(p)
     if playerHandler.GetIsDoneWithAction(p) or bag.BufferCount(p) == 0 then
         FinishPlayerAction(p)
         return false
@@ -132,37 +130,9 @@ function PlayerAction.PullFromBag(p, onComplete)
     soundHandler.PlaySoundForPlayer(p, foodHelloFX)
 
     local exploded = PlayerAction.CheckExplosion(p)
-
-    if exploded then
-        PlayerHeroFoodAnimationStart(p, foodName,
-            function()
-                PlayerExplodedEffect(p, 
-                    function()
-                        FinishPlayerAction(p)
-                    end
-                )
-            end
-        )
-        return false
-    end
     
     PlayerHeroFoodAnimationStart(p, foodName,
         function()
-            --Еда долетела взрываем
-            if exploded then
-                PlayerExplodedEffect(p,
-                    function()
-                        FinishPlayerAction(p)
-                        
-                        if onComplete then
-                            onComplete(false)
-                        end
-                    end
-                )
-
-                return
-            end
-
             playerDragonHandler.MovePlayerDragon(p, foodSteps,
             function()
                 local newTrackSegment = currentTrackSegment + foodSteps
@@ -170,17 +140,23 @@ function PlayerAction.PullFromBag(p, onComplete)
                 playerHandler.SetCurrentTrackSegment(p, newTrackSegment)
                 trackHandler.SetPlayerTrackSegmentFoodName(p, newTrackSegment, foodName)
 
-                 local canContinue =
-                    bag.BufferCount(p) > 0
-                    and not playerHandler.GetIsDoneWithAction(p)
+                    --Еда долетела взрываем
+                if exploded then
+                    PlayerExplodedEffect(p,
+                        function()
+                            FinishPlayerAction(p)
+                        end
+                    )
+                    return
+                end
+
+                local canContinue = bag.BufferCount(p) > 0 and not playerHandler.GetIsDoneWithAction(p)
 
                 if not canContinue then
                     FinishPlayerAction(p)
                 end
-
-                if onComplete then
-                    onComplete(canContinue)
-                end
+                
+                takeFood.SetButtonEnabled(p, canContinue)
                                     
                 --@debug@
                 print("bag count:", bag.BufferCount(p),
