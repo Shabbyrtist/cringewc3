@@ -230,7 +230,7 @@ function UI.CreateButton(options)
 
     local parent = options.parent or UI.GetGameUI()
 
-    local button = BlzCreateFrameByType(
+    local frame = BlzCreateFrameByType(
         "GLUETEXTBUTTON",
         options.name or "",
         parent,
@@ -238,16 +238,16 @@ function UI.CreateButton(options)
         NextContext()
     )
 
-    BlzFrameSetText(button, options.text or "Button")
+    BlzFrameSetText(frame, options.text or "Button")
 
     BlzFrameSetSize(
-        button,
+        frame,
         options.width or 0.10,
         options.height or 0.035
     )
 
     local component = {
-        button = button,
+        button = frame,
         trigger = nil,
         tooltip = nil,
         --enabled = options.enabled ~= false,
@@ -257,12 +257,12 @@ function UI.CreateButton(options)
 
     if options.tooltip then
         component.tooltip = CreateTooltip(
-            button,
+            frame,
             options.tooltip
         )
 
         BlzFrameSetTooltip(
-            button,
+            frame,
             component.tooltip
         )
     end

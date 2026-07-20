@@ -34,7 +34,7 @@ function GameStart.StartPhase()
         trackHandler.CreateTrackForPlayer(p)
         playerHandler.SetCurrentTrackSegment(p, 1)
 
-        bag.AddFood(p, "VillagerM")
+        --[[bag.AddFood(p, "VillagerM")
         bag.AddFood(p, "VillagerM")
         bag.AddFood(p, "VillagerM")
         bag.AddFood(p, "VillagerM")
@@ -45,7 +45,7 @@ function GameStart.StartPhase()
         bag.AddFood(p, "Timmy")
         bag.AddFood(p, "Timmy")
         bag.AddFood(p, "Timmy")
-        bag.AddFood(p, "Timmy")
+        bag.AddFood(p, "Timmy")]]
         bag.AddFood(p, "Timmy")
 
         if (GetLocalPlayer() == p) then

@@ -42,7 +42,7 @@ function TakeFood.Create(p, callback)
         0.0,
         -0.015
     )
-
+    
     UI.Hide(root)
 
     local counterText = UI.CreateText({
