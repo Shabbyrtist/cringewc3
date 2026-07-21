@@ -13,6 +13,48 @@ local DEFAULT_ICON =
     "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp"
 
 
+function UI.HideDefaultUI()
+    BlzHideOriginFrames(true)
+end
+
+
+local systemMenuButton
+
+function UI.CreateMenuButton()
+    if systemMenuButton then
+        return systemMenuButton
+    end
+
+    local defaultMenuButton =
+        BlzGetOriginFrame(
+            ORIGIN_FRAME_SYSTEM_BUTTON,
+            0
+        )
+
+    systemMenuButton = UI.CreateButton({
+        parent = UI.GetGameUI(),
+        text = "Menu",
+        width = 0.075,
+        height = 0.028,
+
+        onClick = function()
+            if defaultMenuButton then
+                BlzFrameClick(defaultMenuButton)
+            end
+        end,
+    })
+
+    UI.SetAbsPoint(
+        systemMenuButton.button,
+        FRAMEPOINT_TOPRIGHT,
+        0.095,
+        0.595
+    )
+
+    return systemMenuButton
+end
+
+
 -- Возвращает уникальный context для создаваемых frame
 local function NextContext()
     frameContext = frameContext + 1
