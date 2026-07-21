@@ -7,7 +7,7 @@ end
 
 function PlayerHandler.OnLeave(p)
     players[p].isInGame = false
-    print('Player ' .. p .. ' has leaved')
+    print('Player ' .. GetPlayerName(p) .. ' has leaved')
 end
 
 function PlayerHandler.IsActive(p)
@@ -79,7 +79,7 @@ function PlayerHandler.Init()
 
             TriggerRegisterPlayerEvent(trig, p, EVENT_PLAYER_LEAVE)
             TriggerAddAction(trig, function()
-                PlayerHandler.onLeave(GetTriggerPlayer())
+                PlayerHandler.OnLeave(GetTriggerPlayer())
             end)
 
             players[p] = {

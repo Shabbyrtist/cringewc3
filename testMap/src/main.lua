@@ -3,7 +3,6 @@ print('main.lua is here')
 FogEnable(false)
 FogMaskEnable(false)
 
-isDebug = true;
 SETTINGS_ROUND_NUMBER = 3;
 SETTINGS_TRACK_SEGMENTS_NUMBER = 50;
 SETTINGS_TRACK_SEGMENTS_LENGTH = 256;
@@ -31,4 +30,5 @@ local bag = require("lib.Bag")
 foodDB.Init()
 playerHandler.Init()
 spellHandler.Init()
+
 phaseHandler.Init()
