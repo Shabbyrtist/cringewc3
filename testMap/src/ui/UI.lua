@@ -344,7 +344,7 @@ function UI.CreateIconButton(options)
 end
 
 
-function UI.SetButtonEnabled(component, enabled)
+function UI.SetEnabled(component, enabled)
     BlzFrameSetEnable(component.button, enabled)
 
     if component.icon then
@@ -423,6 +423,10 @@ function UI.SetTexture(frame, texture, blend)
         0,
         blend == true
     )
+end
+
+function UI.IsVisible(frame)
+    return BlzFrameIsVisible(frame)
 end
 
 

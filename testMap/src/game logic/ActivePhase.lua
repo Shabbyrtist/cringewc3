@@ -4,8 +4,7 @@ local playerHandler         = require("lib.PlayerHandler")
 local playerDragonHandler   = require("lib.PlayerDragonHandler")
 local bag                   = require("lib.Bag")
 
---test
-local takeFood = require("ui.TakeFood")
+local uiConroller           = require("ui.GameUiController")
 
 function Active.StartPhase()
     local phaseHandler = require("lib.PhaseHandler")
@@ -15,22 +14,24 @@ function Active.StartPhase()
     print("Текущий раунд " .. phaseHandler.GetCurrentRound())
     --@debug-end@
 
-    for p, data in pairs(playerHandler.GetPlayers()) do
+    for p, _ in pairs(playerHandler.GetPlayers()) do
         bag.RefreshFoodBag(p)
         playerHandler.SetExplosionChance(p, 0)
         playerDragonHandler.ResetPosition(p)
         playerHandler.SetIsDoneWithAction(p, false)
         
-        takeFood.SetCount(p)
-        takeFood.SetButtonEnabled(p, true)
-        takeFood.Show(p)
+        uiConroller.TakeFood.SetCount(p)
+        uiConroller.TakeFood.SetEnabled(p, true)
+        uiConroller.TakeFood.Show(p)
+
+        uiConroller.SkipAction.Reset(p)
     end
 end
 
 function Active.EndPhase()
 
-    for p, data in pairs(playerHandler.GetPlayers()) do
-        takeFood.Hide(p)
+    for p, _ in pairs(playerHandler.GetPlayers()) do
+        uiConroller.TakeFood.Hide(p)
     end
     
     print("Активная фаза - Конец")

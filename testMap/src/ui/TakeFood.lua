@@ -73,16 +73,13 @@ function TakeFood.Create(p, callback)
         width = 0.05,
         height = 0.05,
 
-        onClick = function(component, triggerPlayer)
+        onClick = function(_, triggerPlayer)
             if triggerPlayer ~= p then
                 return
             end
 
-            if callback.onClick then
-                callback.onClick(
-                    component,
-                    triggerPlayer
-                )
+            if callback.onPull then
+                callback.onPull(triggerPlayer)
             end
         end,
     })
@@ -131,14 +128,14 @@ function TakeFood.Create(p, callback)
     UI.Hide(root)
 end
 
-function TakeFood.SetButtonEnabled(p, enabled)
+function TakeFood.SetEnabled(p, enabled)
     local window = windows[p]
 
     if not window or GetLocalPlayer() ~= p then
         return
     end
 
-    UI.SetButtonEnabled(window.pullButton, enabled)
+    UI.SetEnabled(window.pullButton, enabled)
 end
 
 

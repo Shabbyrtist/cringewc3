@@ -11,36 +11,39 @@ local takeFood              = require("ui.TakeFood")
 
 local function CheckIsAllPlayersDone()
     local phaseHandler = require("lib.PhaseHandler")
+    
+    --timer for test skip/cancel button
+    local testTimer = CreateTimer()
 
-    for p, data in pairs(playerHandler.GetPlayers()) do
-        if not playerHandler.GetIsDoneWithAction(p) then
-            return
+    TimerStart(testTimer, 2, false, 
+    function ()
+        DestroyTimer(testTimer)
+        for p, _ in pairs(playerHandler.GetPlayers()) do
+            if not playerHandler.GetIsDoneWithAction(p) then
+                return
+            end
         end
-    end
 
-    phaseHandler.NextState()
+        phaseHandler.NextState()
+    end)
+
 end
 
-local function FinishPlayerAction(p)
+function PlayerAction.FinishPlayerAction(p)
     playerHandler.SetIsDoneWithAction(p, true)
     CheckIsAllPlayersDone()
 end
 
 
 local function PlayerExplodedEffect(p, onComplete)
-    local pName = GetPlayerName(p)
     local dragon = playerHandler.GetDragonUnit(p)
     
     DestroyEffect(AddSpecialEffect(MDL_MEATEXPLOSION, GetUnitX(dragon), GetUnitY(dragon)))
 
     local timer = CreateTimer()
-    local function DelayEffect()
-        --playerHandler.SetIsDoneWithAction(p, true) --делаем в FinishPlayerAction
-        DestroyTimer(timer)
-    end
     
     TimerStart(timer, 1, false, function()
-        DelayEffect()
+        DestroyTimer(timer)
 
         if onComplete then
             onComplete()
@@ -112,7 +115,7 @@ end
 
 function PlayerAction.PullFromBag(p)
     if playerHandler.GetIsDoneWithAction(p) or bag.BufferCount(p) == 0 then
-        FinishPlayerAction(p)
+        PlayerAction.FinishPlayerAction(p)
         return false
     end
 
@@ -144,7 +147,7 @@ function PlayerAction.PullFromBag(p)
                 if exploded then
                     PlayerExplodedEffect(p,
                         function()
-                            FinishPlayerAction(p)
+                            PlayerAction.FinishPlayerAction(p)
                         end
                     )
                     return
@@ -153,10 +156,10 @@ function PlayerAction.PullFromBag(p)
                 local canContinue = bag.BufferCount(p) > 0 and not playerHandler.GetIsDoneWithAction(p)
 
                 if not canContinue then
-                    FinishPlayerAction(p)
+                    PlayerAction.FinishPlayerAction(p)
                 end
                 
-                takeFood.SetButtonEnabled(p, canContinue)
+                takeFood.SetEnabled(p, canContinue)
                                     
                 --@debug@
                 print("bag count:", bag.BufferCount(p),
