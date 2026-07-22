@@ -17,14 +17,12 @@ function FoodDB.GetFoodExplosionChance(foodName)
     return foodUnits[foodName].data.explosionChance
 end
 
-function FoodDB.GetFoodSFX(foodName, sfxType)
-    if sfxType == "hello" then
-        return foodUnits[foodName].data.sfxHello
-    end
+function FoodDB.GetFoodSFXHello(foodName)
+    return foodUnits[foodName].data.sfxHello
+end
 
-    if sfxType == "death" then
-        return foodUnits[foodName].data.sfxDeath
-    end
+function FoodDB.GetFoodSFXDeath(foodName)
+    return foodUnits[foodName].data.sfxDeath
 end
 
 function FoodDB.GetFoodMDL(foodName)

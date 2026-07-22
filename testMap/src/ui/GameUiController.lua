@@ -2,16 +2,17 @@ local skipAction = require("ui.SkipAction")
 local takeFood = require("ui.TakeFood")
 
 local playerAction = require("game logic.PlayerAction")
-
 local playerHandler = require("lib.PlayerHandler")
+local bag = require("lib.Bag")
 
 local GameUIController = {}
+
 
 function GameUIController.CreatePlayerUI(p)
     takeFood.Create(p, {
         onPull = function(p)
             playerAction.PullFromBag(p)
-            takeFood.SetCount(p)
+            takeFood.SetCount(p, bag.BufferCount(p))
             takeFood.SetEnabled(p, false)
         end,
     })

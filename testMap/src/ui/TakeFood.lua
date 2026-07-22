@@ -4,12 +4,8 @@ local TakeFood = {}
 
 local windows = {}
 
-local playerHandler         = require("lib.PlayerHandler")
-local playerDragonHandler   = require("lib.PlayerDragonHandler")
-local soundHandler          = require("lib.SoundHandler")
-local trackHandler          = require("lib.TrackHandler")
-local foodDB                = require("lib.FoodDB")
-local bag                   = require("lib.Bag")
+local playerHandler = require("lib.PlayerHandler")
+local eventBus  = require("lib.EventBus")
 
 
 function TakeFood.Create(p, callback)
@@ -47,7 +43,7 @@ function TakeFood.Create(p, callback)
 
     local counterText = UI.CreateText({
         parent = root,
-        text = "The amount of food:" .. bag.BufferCount(p),
+        text = "",
         fontSize = 0.012,
         width = 0.16,
         height = 0.025,
@@ -139,18 +135,16 @@ function TakeFood.SetEnabled(p, enabled)
 end
 
 
-function TakeFood.SetCount(p)
+function TakeFood.SetCount(p, value)
     local window = windows[p]
 
     if not window or GetLocalPlayer() ~= p then
         return
     end
 
-    local count = bag.BufferCount(p)
-
     UI.SetText(
         window.counterText,
-        "The amount of food: " .. tostring(count)
+        "The amount of food: " .. tostring(value)
     )
 end
 
@@ -172,5 +166,27 @@ function TakeFood.Hide(p)
     end
 end
 
+-- ============================================
+-- Подписки
+-- ============================================
+
+eventBus.sub_OnPlayerStartActionPhase(
+    function(p)
+        TakeFood.SetEnabled(p, true)
+        TakeFood.Show(p)
+    end
+)
+
+eventBus.sub_OnBagRefresh(
+    function(p, value)
+        TakeFood.SetCount(p, value)
+    end
+)
+
+eventBus.sub_OnPullFromBagEnd(
+    function(p)
+        TakeFood.SetEnabled(p, true)
+    end
+)
 
 return TakeFood

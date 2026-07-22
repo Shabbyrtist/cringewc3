@@ -20,12 +20,16 @@ function PhaseHandler.GetCurrentState()
     return states[currentStateIndex].name
 end
 
-function PhaseHandler.GetCurrentIndex()
-    return currentStateIndex
-end
-
 function PhaseHandler.GetCurrentRound()
     return currentRound
+end
+
+function PhaseHandler.GetStateIndex(stateName)
+    for i, state in ipairs(states) do
+        if state.name == stateName then
+            return  i
+        end
+    end
 end
 
 function PhaseHandler.NextState()
@@ -43,16 +47,6 @@ function PhaseHandler.NextState()
 
     states[currentStateIndex].module.StartPhase()
 end
-
-function PhaseHandler.GetStateIndex(stateName)
-    for i, state in ipairs(states) do
-        if state.name == stateName then
-            return  i
-        end
-    end
-    return false
-end
-
 
 function PhaseHandler.Init() 
     

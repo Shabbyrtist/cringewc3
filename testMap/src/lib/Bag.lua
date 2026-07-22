@@ -1,5 +1,6 @@
 local Bag = {}
 local playerHandler = require("lib.PlayerHandler")
+local eventBus  = require("lib.EventBus")
 
 local function getFoodBag(p)
     if not playerHandler.IsActive(p) then
@@ -36,6 +37,8 @@ function Bag.RefreshFoodBag(p)
     for i, food in ipairs(copy) do
         table.insert(bufferBag, food)
     end
+
+    eventBus.fire(TrigDB.OnBagRefresh, p, Bag.BufferCount(p))
 end
 
 function Bag.AddFood(p, foodName)
@@ -77,5 +80,17 @@ function Bag.BufferGetRandom(p)
     table.remove(bag, index)
     return food
 end
+
+-- ============================================
+-- Подписки
+-- ============================================
+
+eventBus.sub_OnStartOfActionPhase(
+    function()
+        for p, _ in pairs(playerHandler.GetPlayers()) do
+            Bag.RefreshFoodBag(p)
+        end
+    end
+)
 
 return Bag

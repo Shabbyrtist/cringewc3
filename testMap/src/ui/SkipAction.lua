@@ -1,6 +1,9 @@
 local SkipAction = {}
 
 local UI = require("ui.UI")
+
+local playerHandler = require("lib.PlayerHandler")
+local eventBus  = require("lib.EventBus")
  
 windows = {}
 
@@ -122,5 +125,26 @@ function SkipAction.Reset(p)
     UI.Hide(window.cancelButton.button)
 end
 
+-- ============================================
+-- Подписки
+-- ============================================
+
+eventBus.sub_OnPlayerStartActionPhase(
+    function(p)
+        SkipAction.Reset(p)
+    end
+)
+
+eventBus.sub_OnPullFromBag(
+    function(p)
+        SkipAction.Hide(p)
+    end
+)
+
+eventBus.sub_OnPullFromBagEnd(
+    function(p)
+        SkipAction.Show(p)
+    end
+)
 
 return SkipAction

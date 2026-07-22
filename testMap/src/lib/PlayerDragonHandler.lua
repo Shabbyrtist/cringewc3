@@ -1,34 +1,21 @@
 local PlayerDragonHandler = {}
+local foodDB = require("lib.FoodDB")
 local playerHandler = require("lib.PlayerHandler")
+local eventBus = require("lib.EventBus")
 
-local function EndOfMovement(p)
-    local dragon = playerHandler.GetDragonUnit(p)
-    local chance, isExploded = PlayerDragonHandler.IsPlayerDragonExploded(p)
-    local activePhase = require("game logic.ActivePhase")
+function PlayerDragonHandler.MovePlayerDragon(p, foodName)
 
-    --@debug@
-    print("Выпашее значение: " .. chance .. "; Шанс взрыва: " .. playerHandler.GetExplosionChance(p))
-    --@debug-end@
-
-    if isExploded then
-        activePhase.PlayerAction(p, "exploded")
+    local foodSteps = foodDB.GetFoodStepsForPlayer(foodName, p)
+    local currentSegment = playerHandler.GetCurrentTrackSegment(p)
+    if currentSegment + foodSteps > SETTINGS_TRACK_SEGMENTS_NUMBER then
+        foodSteps = SETTINGS_TRACK_SEGMENTS_NUMBER - currentSegment
     end
-end
 
-function PlayerDragonHandler.IsPlayerDragonExploded(p)
-    local chance = GetRandomInt(1, 100)
-    local playerExplosionChance = playerHandler.GetExplosionChance(p)
-    local playerExplosionChanceTrashhold = playerHandler.GetExplosionChanceTrashhold(p)
-
-    return chance, (chance < playerExplosionChance) and (playerExplosionChance > playerExplosionChanceTrashhold)
-end
-
-function PlayerDragonHandler.MovePlayerDragon(p, steps, callbackEnd)
     local dragon = playerHandler.GetDragonUnit(p)
     local speed = 25
     local x = GetUnitX(dragon)
 
-    local distance = steps * SETTINGS_TRACK_SEGMENTS_LENGTH 
+    local distance = foodSteps * SETTINGS_TRACK_SEGMENTS_LENGTH 
     local currentY = GetUnitY(dragon)
     local targetY = currentY + distance
     distance = math.abs(distance)
@@ -43,9 +30,9 @@ function PlayerDragonHandler.MovePlayerDragon(p, steps, callbackEnd)
         tik = tik + 1
         if tik >= tiks then
             SetUnitPosition(dragon, x, targetY)
-            playerHandler.SetCurrentTrackSegment(p, playerHandler.GetCurrentTrackSegment(p) + steps)
-            --EndOfMovement(p)
-            callbackEnd()
+
+            eventBus.fire(TrigDB.OnDragonMovementEnd, p, foodName, currentSegment + foodSteps)
+
             DestroyTimer(timer)
             return
         end
@@ -65,7 +52,7 @@ function PlayerDragonHandler.ResetPosition(p)
     playerHandler.SetCurrentTrackSegment(p, 0)
 
     for i = 0, SETTINGS_TRACK_SEGMENTS_NUMBER do
-        if trackHandler.GetPlayerTrackSegmentFoodName ~= "" then
+        if trackHandler.GetPlayerTrackSegmentFoodName(p, i) ~= "" then
             DestroyEffect(trackHandler.GetPlayerTrackSegmentFoodEffect(p, i))
             trackHandler.SetPlayerTrackSegmentFoodName(p, i, "")
         end
@@ -88,5 +75,21 @@ function PlayerDragonHandler.CreateDragonForPlayer(p)
     
     return dragon
 end
+
+-- ============================================
+-- Подписки
+-- ============================================
+
+eventBus.sub_OnPlayerStartActionPhase(
+    function(p)
+        PlayerDragonHandler.ResetPosition(p)
+    end
+)
+
+eventBus.sub_OnFeedingAnimationEnd(
+    function(p, foodName)
+        PlayerDragonHandler.MovePlayerDragon(p, foodName)
+    end
+)
 
 return PlayerDragonHandler

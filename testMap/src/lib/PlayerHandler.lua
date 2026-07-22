@@ -1,6 +1,8 @@
 local PlayerHandler = {}
 local players = {}
 
+local eventBus  = require("lib.EventBus")
+
 function PlayerHandler.GetPlayers()
     return players
 end
@@ -28,6 +30,15 @@ end
 
 function PlayerHandler.GetIsDoneWithAction(p)
     return players[p].isDoneWithAction
+end
+
+function PlayerHandler.IsAllPlayersDoneWithAction()
+    for p, _ in pairs(PlayerHandler.GetPlayers()) do
+        if not PlayerHandler.GetIsDoneWithAction(p) then
+            return false
+        end
+    end
+    return true
 end
 
 function PlayerHandler.SetCurrentTrackSegment(p, v)
@@ -103,5 +114,38 @@ function PlayerHandler.Init()
         end
     end
 end
+
+-- ============================================
+-- Подписки
+-- ============================================
+
+eventBus.sub_OnPlayerStartActionPhase(
+    function (p)
+        PlayerHandler.SetExplosionChance(p, 0)
+        PlayerHandler.SetIsDoneWithAction(p, false)
+    end
+)
+
+eventBus.sub_OnPlayerFinishActionPhase(
+    function (p)
+        local phaseHandler = require("lib.PhaseHandler")
+        PlayerHandler.SetIsDoneWithAction(p, true)
+        
+        local timer = CreateTimer()
+        TimerStart(timer, 2, false, 
+        function ()
+            if PlayerHandler.IsAllPlayersDoneWithAction() then
+                phaseHandler.NextState()
+            end
+            DestroyTimer(timer)
+        end)
+    end
+)
+
+eventBus.sub_OnDragonMovementEnd(
+    function (p, foodName, currentSegmentIndex)
+        PlayerHandler.SetCurrentTrackSegment(p, currentSegmentIndex)
+    end
+)
 
 return PlayerHandler

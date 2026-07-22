@@ -1,10 +1,7 @@
 local Active = {}
 
 local playerHandler         = require("lib.PlayerHandler")
-local playerDragonHandler   = require("lib.PlayerDragonHandler")
-local bag                   = require("lib.Bag")
-
-local uiConroller           = require("ui.GameUiController")
+local eventBus  = require("lib.EventBus")
 
 function Active.StartPhase()
     local phaseHandler = require("lib.PhaseHandler")
@@ -14,27 +11,25 @@ function Active.StartPhase()
     print("Текущий раунд " .. phaseHandler.GetCurrentRound())
     --@debug-end@
 
+    eventBus.fire(TrigDB.OnStartOfActionPhase, phaseHandler.GetCurrentRound)
     for p, _ in pairs(playerHandler.GetPlayers()) do
-        bag.RefreshFoodBag(p)
-        playerHandler.SetExplosionChance(p, 0)
-        playerDragonHandler.ResetPosition(p)
-        playerHandler.SetIsDoneWithAction(p, false)
-        
-        uiConroller.TakeFood.SetCount(p)
-        uiConroller.TakeFood.SetEnabled(p, true)
-        uiConroller.TakeFood.Show(p)
-
-        uiConroller.SkipAction.Reset(p)
+        eventBus.fire(TrigDB.OnPlayerStartActionPhase, p, phaseHandler.GetCurrentRound)
     end
+    
 end
 
 function Active.EndPhase()
-
-    for p, _ in pairs(playerHandler.GetPlayers()) do
-        uiConroller.TakeFood.Hide(p)
-    end
+    local phaseHandler = require("lib.PhaseHandler")
     
+    --@debug@
     print("Активная фаза - Конец")
+    print("Текущий раунд " .. phaseHandler.GetCurrentRound())
+    --@debug-end@
+
+    eventBus.fire(TrigDB.OnEndOfActionPhase, phaseHandler.GetCurrentRound)
+    for p, _ in pairs(playerHandler.GetPlayers()) do
+        eventBus.fire(TrigDB.OnPlayerEndActionPhase, p, phaseHandler.GetCurrentRound)
+    end
 end
 
 return Active

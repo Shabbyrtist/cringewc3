@@ -1,21 +1,20 @@
 local SoundHandler = {}
+local eventBus  = require("lib.EventBus")
+local foodDB = require("lib.FoodDB")
 
-function SoundHandler.PlaySoundForPlayer(p, soundPath)
-    -- Создаем звук
-    local sound = CreateSound(soundPath, false, false, false, 10, 10, "")
+function SoundHandler.PlaySoundForPlayer(soundPath)
+    local x = GetCameraTargetPositionX()
+    local y = GetCameraTargetPositionY()
+    local z = GetCameraTargetPositionZ()
     
-    -- Устанавливаем громкость (0-127)
+    -- Создаем 3D звук
+    local sound = CreateSound(soundPath, false, false, true, 10, 10, "")
     SetSoundVolume(sound, 127)
+    SetSoundPosition(sound, x, y, z)
+    SetSoundDistances(sound, 0, 100)
     
-    -- Устанавливаем, что звук воспроизводится для игрока
-    SetSoundPosition(sound, 0, 0, 0)
-    
-    -- Запускаем звук
     StartSound(sound)
-    
-    -- Уничтожаем после воспроизведения
     KillSoundWhenDone(sound)
-    
     return sound
 end
 
@@ -27,5 +26,23 @@ function SoundHandler.PlaySoundGlobal(soundPath)
     KillSoundWhenDone(sound)
     return sound
 end
+
+-- ============================================
+-- Подписки
+-- ============================================
+
+eventBus.sub_OnFeedingAnimationStart(
+    function (p, foodName)
+        local sfx = foodDB.GetFoodSFXHello(foodName)
+        SoundHandler.PlaySoundForPlayer(sfx)
+    end
+)
+
+eventBus.sub_OnFeedingAnimationEnd(
+    function (p, foodName)
+        local sfx = foodDB.GetFoodSFXDeath(foodName)
+        SoundHandler.PlaySoundForPlayer(sfx)
+    end
+)
 
 return SoundHandler

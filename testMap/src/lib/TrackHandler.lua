@@ -3,6 +3,7 @@ local track = {}
 
 local playerHandler = require("lib.PlayerHandler")
 local foodDB = require("lib.FoodDB")
+local eventBus  = require("lib.EventBus")
 
 function TrackHandler.GetPlayerTrackX(p)
     return track[p].x
@@ -92,5 +93,15 @@ function TrackHandler.DrawFood()
         end
     end
 end
+
+-- ============================================
+-- Подписки
+-- ============================================
+
+eventBus.sub_OnDragonMovementEnd(
+    function (p, foodName, currentTrackSegment)
+        TrackHandler.SetPlayerTrackSegmentFoodName(p, currentTrackSegment, foodName)
+    end
+)
 
 return TrackHandler
