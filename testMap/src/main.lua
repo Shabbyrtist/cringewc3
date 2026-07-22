@@ -6,6 +6,7 @@ FogMaskEnable(false)
 SETTINGS_ROUND_NUMBER = 3;
 SETTINGS_TRACK_SEGMENTS_NUMBER = 50;
 SETTINGS_TRACK_SEGMENTS_LENGTH = 256;
+SETTINGS_EXPLOSION_PROGRESS_FACTOR = 0.3;
 
 SFX_FOOD_TIMMY_HELLO = "units\\critters\\villagerkid\\villagercwhat1.wav"
 SFX_FOOD_TIMMY_DEATH = "units\\critters\\villagerkid\\villagerchilddeath1.wav"
@@ -20,6 +21,8 @@ MDL_FOOD_VILLAGERF = "units\\critters\\VillagerWoman\\VillagerWoman"
 
 MDL_MEATEXPLOSION = "Objects\\Spawnmodels\\Human\\HumanLargeDeathExplode\\HumanLargeDeathExplode.mdl"
 MDL_MEATMISSILE = "Abilities\\Weapons\\MeatwagonMissile\\MeatwagonMissile.mdl"
+MDL_DRAGON_RED = "units\\creeps\\RedDragon\\RedDragon"
+MDL_EXPLOSION_TRAIL = "Abilities\\Weapons\\RedDragonBreath\\RedDragonMissile.mdl"
 
 local playerHandler = require("lib.PlayerHandler")
 local spellHandler = require("lib.SpellHandler")

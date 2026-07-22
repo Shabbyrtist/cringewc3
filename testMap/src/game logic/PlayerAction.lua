@@ -1,7 +1,6 @@
 local PlayerAction = {}
 
 local playerHandler         = require("lib.PlayerHandler")
-local trackHandler          = require("lib.TrackHandler")
 local foodDB                = require("lib.FoodDB")
 local bag                   = require("lib.Bag")
 local eventBus              = require("lib.EventBus")
@@ -53,6 +52,7 @@ local function PlayerHeroFeedingAnimation(p, foodName)
 
             if currentTime >= time then
                 eventBus.fire(TrigDB.OnFeedingAnimationEnd, p, foodName)
+                SetUnitAnimation(hero, 'stand')
                 DestroyTimer(timer)
                 DestroyEffect(eff)
                 return
@@ -84,7 +84,6 @@ function PlayerAction.PullFromBag(p)
         function (p)
             local dragon = playerHandler.GetDragonUnit(p)
             DestroyEffect(AddSpecialEffect(MDL_MEATEXPLOSION, GetUnitX(dragon), GetUnitY(dragon)))
-            eventBus.fire(TrigDB.OnPlayerFinishActionPhase, p)
         end
     )
     

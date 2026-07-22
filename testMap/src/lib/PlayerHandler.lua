@@ -131,14 +131,9 @@ eventBus.sub_OnPlayerFinishActionPhase(
         local phaseHandler = require("lib.PhaseHandler")
         PlayerHandler.SetIsDoneWithAction(p, true)
         
-        local timer = CreateTimer()
-        TimerStart(timer, 2, false, 
-        function ()
-            if PlayerHandler.IsAllPlayersDoneWithAction() then
-                phaseHandler.NextState()
-            end
-            DestroyTimer(timer)
-        end)
+        if PlayerHandler.IsAllPlayersDoneWithAction() then
+            phaseHandler.NextState()
+        end
     end
 )
 

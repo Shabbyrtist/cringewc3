@@ -1,7 +1,7 @@
 local Active = {}
 
-local playerHandler         = require("lib.PlayerHandler")
-local eventBus  = require("lib.EventBus")
+local playerHandler = require("lib.PlayerHandler")
+local eventBus      = require("lib.EventBus")
 
 function Active.StartPhase()
     local phaseHandler = require("lib.PhaseHandler")
