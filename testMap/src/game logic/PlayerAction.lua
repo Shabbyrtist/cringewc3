@@ -42,7 +42,9 @@ local function PlayerHeroFeedingAnimation(p, foodName)
 
     local currentTime = 0
     local heightMultiplier = 4
-    local arcHeight = math.max(50, distance * heightMultiplier / 8)
+    local maxHeightLimit = 250
+    local calculatedHeight = math.max(50, distance * heightMultiplier / 8)
+    local arcHeight = math.min(calculatedHeight, maxHeightLimit)
 
     local timer = CreateTimer()
     
@@ -61,7 +63,7 @@ local function PlayerHeroFeedingAnimation(p, foodName)
             local t = currentTime / time
             local currentX = x + dx * t
             local currentY = y + dy * t
-            local currentZ = z + dz * t + arcHeight * 4 * t * (1 - t)
+            local currentZ = z + dz * t + arcHeight * heightMultiplier * t * (1 - t)
             BlzSetSpecialEffectPosition(eff, currentX, currentY, currentZ)
         end
     )
@@ -79,27 +81,21 @@ function PlayerAction.PullFromBag(p)
     local foodName = bag.BufferGetRandom(p)
     local foodExplosionChance = foodDB.GetFoodExplosionChance(foodName)
     local newExplosionChance = playerHandler.GetExplosionChance(p) + foodExplosionChance
-
-    local explosionSub = eventBus.sub_OnPlayerExploded(
-        function (p)
-            local dragon = playerHandler.GetDragonUnit(p)
-            DestroyEffect(AddSpecialEffect(MDL_MEATEXPLOSION, GetUnitX(dragon), GetUnitY(dragon)))
-        end
-    )
     
-    eventBus.once_OnDragonMovementEnd(
+    local sub
+    sub = eventBus.sub_OnDragonMovementEnd(
         function (p, foodName, currentTrackSegment)
             if PlayerAction.CheckExplosion(p) then
                 eventBus.fire(TrigDB.OnPlayerExploded, p)
             else
                 local canContinue = bag.BufferCount(p) > 0 and not playerHandler.GetIsDoneWithAction(p)
-                if not canContinue then
-                    eventBus.fire(TrigDB.OnPlayerFinishActionPhase, p)
-                else
+                if canContinue then
                     eventBus.fire(TrigDB.OnPullFromBagEnd, p)
+                else
+                    eventBus.fire(TrigDB.OnPlayerFinishActionPhase, p)
                 end
             end
-            eventBus.unsubscribe(TrigDB.OnPlayerExploded, explosionSub)
+            eventBus.unsubscribe(TrigDB.OnDragonMovementEnd, sub)
         end
     )
     

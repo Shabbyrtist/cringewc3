@@ -52,7 +52,7 @@ local function ExposionAnimation(p, steps)
 
                 DestroyTimer(timer)
 
-                local newSteps = math.max(1, math.floor(steps * SETTINGS_EXPLOSION_PROGRESS_FACTOR))
+                local newSteps = math.max(1, math.ceil(steps * SETTINGS_EXPLOSION_PROGRESS_FACTOR))
                 if GetRandomInt(1, 100) <= 50 and currentSegment - newSteps > 0 then
                     ExposionAnimation(p, newSteps)
                 else
@@ -166,7 +166,7 @@ eventBus.sub_OnFeedingAnimationEnd(
 
 eventBus.sub_OnPlayerExploded(
     function(p)
-        local steps = math.max(1, math.floor(playerHandler.GetCurrentTrackSegment(p) * SETTINGS_EXPLOSION_PROGRESS_FACTOR))
+        local steps = math.max(1, math.ceil(playerHandler.GetCurrentTrackSegment(p) * SETTINGS_EXPLOSION_PROGRESS_FACTOR))
         ExposionAnimation(p, steps)
     end
 )

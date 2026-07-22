@@ -3,6 +3,27 @@ print('main.lua is here')
 FogEnable(false)
 FogMaskEnable(false)
 
+MDL_DRAGON_ROOST_BRONZE = "buildings\\other\\DragonRoost\\DragonRoost"
+MDL_DRAGON_ROOST_BLACK  = "buildings\\other\\DragonBuildingBlack\\DragonBuildingBlack"
+MDL_DRAGON_ROOST_GREEN  = "buildings\\other\\DragonBuildingGreen\\DragonBuildingGreen"
+MDL_DRAGON_ROOST_RED    = "buildings\\other\\DragonBuilding\\DragonBuilding"
+MDL_DRAGON_ROOST_BLUE = "buildings\\other\\DragonBuildingBlue\\DragonBuildingBlue"
+
+local dragonRoosts = {
+    MDL_DRAGON_ROOST_BRONZE,
+    MDL_DRAGON_ROOST_BLACK,
+    MDL_DRAGON_ROOST_GREEN,
+    MDL_DRAGON_ROOST_RED,
+    MDL_DRAGON_ROOST_BLUE
+}
+
+for i = 0, 7, 1 do
+    local x = -2696 + 768.0 * i
+    local index = (i % #dragonRoosts) + 1
+    local eff = AddSpecialEffect(dragonRoosts[index], x, -3072.0)
+    BlzSetSpecialEffectMatrixScale(eff, 1, 1, 0.05)
+end
+
 SETTINGS_ROUND_NUMBER = 3;
 SETTINGS_TRACK_SEGMENTS_NUMBER = 50;
 SETTINGS_TRACK_SEGMENTS_LENGTH = 256;

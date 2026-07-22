@@ -115,21 +115,11 @@ TrigDB.OnDragonMovementEnd = "OnDragonMovementEnd"
 function EventBus.sub_OnDragonMovementEnd(callback)
     return EventBus.subscribe(TrigDB.OnDragonMovementEnd, callback)
 end
----@param callback fun(p : player, foodName : string, currentTrackSegment : number)
----@return integer handler_id
-function EventBus.once_OnDragonMovementEnd(callback)
-    return EventBus.once(TrigDB.OnDragonMovementEnd, callback)
-end
 
 TrigDB.OnPlayerExploded = "OnPlayerExploded"
 ---@param callback fun(p : player)
 function EventBus.sub_OnPlayerExploded(callback)
     return EventBus.subscribe(TrigDB.OnPlayerExploded, callback)
-end
----@param callback fun(p : player)
----@return integer handler_id
-function EventBus.once_OnPlayerExploded(callback)
-    return EventBus.once(TrigDB.OnPlayerExploded, callback)
 end
 
 return EventBus

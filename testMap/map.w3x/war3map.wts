@@ -38,18 +38,8 @@ STRING 8
 Player 8
 }
 
-STRING 9
+STRING 12
 {
-comp
-}
-
-STRING 10
-{
-Force 1
-}
-
-STRING 11
-{
-Force 2
+DragonFeeders
 }
 
