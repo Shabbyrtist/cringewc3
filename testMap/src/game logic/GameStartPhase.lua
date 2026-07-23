@@ -36,7 +36,7 @@ function GameStart.StartPhase()
         SetUnitPosition(hero, x - 256., y)
 
         trackHandler.CreateTrackForPlayer(p)
-        playerHandler.SetCurrentTrackSegment(p, 1)
+        playerHandler.SetCurrentTrackSegment(p, 0)
 
         bag.AddFood(p, "VillagerM")
         bag.AddFood(p, "VillagerM")

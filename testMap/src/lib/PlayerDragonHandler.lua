@@ -52,8 +52,8 @@ local function ExposionAnimation(p, steps)
 
                 DestroyTimer(timer)
 
-                local newSteps = math.max(1, math.ceil(steps * SETTINGS_EXPLOSION_PROGRESS_FACTOR))
-                if GetRandomInt(1, 100) <= 50 and currentSegment - newSteps > 0 then
+                local newSteps = math.max(1, R2I(steps * SETTINGS_EXPLOSION_PROGRESS_FACTOR))
+                if GetRandomInt(1, 100) <= currentSegment*2 and currentSegment - newSteps >= 0 then
                     ExposionAnimation(p, newSteps)
                 else
                     eventBus.fire(TrigDB.OnPlayerFinishActionPhase, p)
@@ -104,7 +104,6 @@ function PlayerDragonHandler.MovePlayerDragon(p, foodName)
             SetUnitPosition(dragon, x, targetY)
 
             eventBus.fire(TrigDB.OnDragonMovementEnd, p, foodName, currentSegment + foodSteps)
-
             DestroyTimer(timer)
             return
         end
@@ -121,14 +120,6 @@ function PlayerDragonHandler.ResetPosition(p)
     local y = trackHandler.GetPlayerTrackSegmentY(p, 0)
 
     SetUnitPosition(dragon, x, y)
-    playerHandler.SetCurrentTrackSegment(p, 0)
-
-    for i = 0, SETTINGS_TRACK_SEGMENTS_NUMBER do
-        if trackHandler.GetPlayerTrackSegmentFoodName(p, i) ~= "" then
-            DestroyEffect(trackHandler.GetPlayerTrackSegmentFoodEffect(p, i))
-            trackHandler.SetPlayerTrackSegmentFoodName(p, i, "")
-        end
-    end
         
     if (GetLocalPlayer() == p) then
         SelectUnit(dragon, true)
@@ -166,7 +157,7 @@ eventBus.sub_OnFeedingAnimationEnd(
 
 eventBus.sub_OnPlayerExploded(
     function(p)
-        local steps = math.max(1, math.ceil(playerHandler.GetCurrentTrackSegment(p) * SETTINGS_EXPLOSION_PROGRESS_FACTOR))
+        local steps = math.max(1, R2I(playerHandler.GetCurrentTrackSegment(p) * SETTINGS_EXPLOSION_PROGRESS_FACTOR))
         ExposionAnimation(p, steps)
     end
 )

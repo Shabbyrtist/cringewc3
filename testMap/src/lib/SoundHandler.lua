@@ -45,4 +45,16 @@ eventBus.sub_OnFeedingAnimationEnd(
     end
 )
 
+eventBus.sub_OnPlayerFinishActionTimerTik(
+    function ()
+        SoundHandler.PlaySoundForPlayer(SFX_TIME_TIK)
+    end
+)
+
+eventBus.sub_OnPlayerPickUpCoin(
+    function (p, segment, coinValue)
+        SoundHandler.PlaySoundForPlayer(SFX_COIN)
+    end
+)
+
 return SoundHandler

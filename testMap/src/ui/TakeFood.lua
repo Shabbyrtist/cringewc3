@@ -10,8 +10,8 @@ local eventBus  = require("lib.EventBus")
 
 function TakeFood.Create(p, callback)
     local root = UI.CreatePanel({
-        width = 0.30,
-        height = 0.24,
+        width = 0.01,
+        height = 0.01,
     })
 
     UI.SetAbsPoint(

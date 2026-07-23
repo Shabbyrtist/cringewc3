@@ -4,9 +4,9 @@ local takeFood = require("ui.TakeFood")
 local playerAction = require("game logic.PlayerAction")
 local playerHandler = require("lib.PlayerHandler")
 local bag = require("lib.Bag")
+local eventBus  = require("lib.EventBus")
 
 local GameUIController = {}
-
 
 function GameUIController.CreatePlayerUI(p)
     takeFood.Create(p, {
@@ -24,7 +24,7 @@ function GameUIController.CreatePlayerUI(p)
                 return
             end
 
-            playerAction.FinishPlayerAction(p)
+            eventBus.fire(TrigDB.OnPlayerFinishActionPhase, p)
             skipAction.Toggle(p)
         end,
 
@@ -37,6 +37,24 @@ function GameUIController.CreatePlayerUI(p)
             skipAction.Toggle(p)
         end,
     }) 
+    
+    
+    --@debug@
+    local InfoLabel = require("ui.DebugLabel")
+    InfoLabel.Create(p)
+    InfoLabel.AddLine(p, "VP", 0)
+    InfoLabel.AddLine(p, "Gold", 0)
+    InfoLabel.AddLine(p, "CurrentSegment", 0)
+    InfoLabel.Show(p)
+    local t = CreateTimer()
+    TimerStart(t, 0.01, true, 
+        function() 
+            InfoLabel.UpdateValue(p, "VP", playerHandler.GetVP(p))
+            InfoLabel.UpdateValue(p, "Gold", playerHandler.GetGold(p))
+            InfoLabel.UpdateValue(p, "CurrentSegment", playerHandler.GetCurrentTrackSegment(p))
+        end
+    )
+    --@end-debug@
 end
 
 

@@ -20,8 +20,20 @@ function PlayerHandler.IncreasExplosionChance(p, chance)
     players[p].explosionChance = players[p].explosionChance + chance
 end
 
+function PlayerHandler.GetVP(p)
+    return players[p].vp
+end
+
 function PlayerHandler.AddVP(p, vp)
     players[p].vp = players[p].vp + vp
+end
+
+function PlayerHandler.GetGold(p)
+    return players[p].gold
+end
+
+function PlayerHandler.AddGold(p, v)
+    players[p].gold = players[p].gold + v
 end
 
 function PlayerHandler.SetIsDoneWithAction(p, b)
@@ -32,6 +44,14 @@ function PlayerHandler.GetIsDoneWithAction(p)
     return players[p].isDoneWithAction
 end
 
+function PlayerHandler.SetIsExploded(p, b)
+    players[p].isExploded = b
+end
+
+function PlayerHandler.GetIsExploded(p)
+    return players[p].isExploded
+end
+
 function PlayerHandler.IsAllPlayersDoneWithAction()
     for p, _ in pairs(PlayerHandler.GetPlayers()) do
         if not PlayerHandler.GetIsDoneWithAction(p) then
@@ -39,6 +59,16 @@ function PlayerHandler.IsAllPlayersDoneWithAction()
         end
     end
     return true
+end
+
+function PlayerHandler.GetNumberOfPlayerInAction()
+    local n = 0
+    for p, _ in pairs(PlayerHandler.GetPlayers()) do
+        if PlayerHandler.GetIsDoneWithAction(p) then
+            n = n + 1
+        end
+    end
+    return n
 end
 
 function PlayerHandler.SetCurrentTrackSegment(p, v)
@@ -104,11 +134,14 @@ function PlayerHandler.Init()
                 bufferFoodBag = {},
 
                 isDoneWithAction = false,
+                isExploded = false,
                 currentTrackSegment = 0,
 
                 explosionChance = 0,
                 explosionChanceTrashhold = 15,
-                vp = 0
+
+                vp = 0,
+                gold = 0
             }
             
         end
@@ -123,17 +156,46 @@ eventBus.sub_OnPlayerStartActionPhase(
     function (p)
         PlayerHandler.SetExplosionChance(p, 0)
         PlayerHandler.SetIsDoneWithAction(p, false)
+        PlayerHandler.SetIsExploded(p, false)
+    end
+)
+
+eventBus.sub_OnPlayerExploded(
+    function (p)
+        PlayerHandler.SetIsExploded(p, true)
     end
 )
 
 eventBus.sub_OnPlayerFinishActionPhase(
     function (p)
-        local phaseHandler = require("lib.PhaseHandler")
+        local t = CreateTimer()
+        local tiks = 3
+        local isExploded = PlayerHandler.GetIsExploded(p)
         PlayerHandler.SetIsDoneWithAction(p, true)
-        
-        if PlayerHandler.IsAllPlayersDoneWithAction() then
-            phaseHandler.NextState()
-        end
+
+        TimerStart(t, 1., true,
+            function()
+                if (tiks > 0 and not isExploded) then
+                    if PlayerHandler.GetIsDoneWithAction(p) then
+                        eventBus.fire(TrigDB.OnPlayerFinishActionTimerTik, p, tiks)
+                    end
+                    tiks = tiks - 1
+                else
+                    DestroyTimer(t)
+                    local phaseHandler = require("lib.PhaseHandler")
+                    if PlayerHandler.IsAllPlayersDoneWithAction() then
+                        phaseHandler.NextState()
+                    end
+                end
+            end
+        )
+    end
+)
+
+eventBus.sub_OnPlayerEndActionPhase(
+    function (p, currentRound)
+        local vp = PlayerHandler.GetCurrentTrackSegment(p)
+        PlayerHandler.AddVP(p, vp)
     end
 )
 

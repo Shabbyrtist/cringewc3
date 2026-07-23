@@ -29,12 +29,17 @@ SETTINGS_TRACK_SEGMENTS_NUMBER = 50;
 SETTINGS_TRACK_SEGMENTS_LENGTH = 256;
 SETTINGS_EXPLOSION_PROGRESS_FACTOR = 0.3;
 
+SETTING_COIN_MAX_SCALE = 3
+
 SFX_FOOD_TIMMY_HELLO = "units\\critters\\villagerkid\\villagercwhat1.wav"
 SFX_FOOD_TIMMY_DEATH = "units\\critters\\villagerkid\\villagerchilddeath1.wav"
 SFX_FOOD_VILLAGERM_HELLO = "units\\critters\\villagerman\\villagerm3.wav"
 SFX_FOOD_VILLAGERM_DEATH = "units\\critters\\villagerman\\villagermaledeath1.wav"
 SFX_FOOD_VILLAGERF_HELLO = "units\\critters\\villagerwoman\\villagerf1.wav"
 SFX_FOOD_VILLAGERF_DEATH = "units\\human\\sorceress\\sorceressdeath.wav"
+
+SFX_TIME_TIK = "sound\\interface\\battlenettick.wav"
+SFX_COIN = "sound\\interface\\receivegold.wav"
 
 MDL_FOOD_TIMMY = "units\\critters\\VillagerKid\\VillagerKid"
 MDL_FOOD_VILLAGERM = "units\\critters\\VillagerMan1\\VillagerMan1"
@@ -44,12 +49,14 @@ MDL_MEATEXPLOSION = "Objects\\Spawnmodels\\Human\\HumanLargeDeathExplode\\HumanL
 MDL_MEATMISSILE = "Abilities\\Weapons\\MeatwagonMissile\\MeatwagonMissile.mdl"
 MDL_DRAGON_RED = "units\\creeps\\RedDragon\\RedDragon"
 MDL_EXPLOSION_TRAIL = "Abilities\\Weapons\\RedDragonBreath\\RedDragonMissile.mdl"
+MDL_COIN = "Objects\\InventoryItems\\PotofGold\\PotofGold.mdl"
 
 local playerHandler = require("lib.PlayerHandler")
 local spellHandler = require("lib.SpellHandler")
 local phaseHandler = require("lib.PhaseHandler")
 local foodDB = require("lib.FoodDB")
 local soundHandler = require("lib.SoundHandler")
+local chatAlertHandler = require("lib.ChatAlertHandler")
 
 foodDB.Init()
 playerHandler.Init()

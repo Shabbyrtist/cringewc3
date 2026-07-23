@@ -62,7 +62,7 @@ function FoodDB.Init()
 
     data = {
         steps = function(p)
-            local steps = 2
+            local steps = 1
             local currentTrackSegment = playerHandler.GetCurrentTrackSegment(p)
             local lastFoodName = trackHandler.GetPlayerTrackSegmentFoodName(p, currentTrackSegment)
 
@@ -71,7 +71,7 @@ function FoodDB.Init()
             elseif lastFoodName == "VillagerM" then
                 steps = 3  
             elseif lastFoodName == "Timmy" then
-                steps = 2 
+                steps = 1 
             end
 
             return steps

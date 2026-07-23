@@ -122,4 +122,16 @@ function EventBus.sub_OnPlayerExploded(callback)
     return EventBus.subscribe(TrigDB.OnPlayerExploded, callback)
 end
 
+TrigDB.OnPlayerFinishActionTimerTik = "OnPlayerFinishActionTimerTik"
+---@param callback fun(p : player, tiks : number)
+function EventBus.sub_OnPlayerFinishActionTimerTik(callback)
+    return EventBus.subscribe(TrigDB.OnPlayerFinishActionTimerTik, callback)
+end
+
+TrigDB.OnPlayerPickUpCoin = "OnPlayerPickUpCoin"
+---@param callback fun(p : player, segment : number, coinValue : number)
+function EventBus.sub_OnPlayerPickUpCoin(callback)
+    return EventBus.subscribe(TrigDB.OnPlayerPickUpCoin, callback)
+end
+
 return EventBus
